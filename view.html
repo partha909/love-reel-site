@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Love Reel</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(135deg,#ff6a88,#ff99ac);
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+color:white;
+text-align:center;
+}
+
+h1{
+font-size:30px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div>
+
+<h1 id="title"></h1>
+
+<p>❤️ Welcome to this special love reel ❤️</p>
+
+</div>
+
+<script>
+
+const params = new URLSearchParams(window.location.search)
+
+const creator = params.get("creator")
+const lover = params.get("lover")
+
+document.getElementById("title").innerText =
+"Website Created By " + creator + " ❤️ For " + lover
+
+</script>
+
+</body>
+</html>
