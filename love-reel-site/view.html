@@ -54,54 +54,20 @@ border-radius:10px;
 opacity:0;
 }
 
-/* PHOTO EFFECTS */
-
-.fade{animation:fade 2s forwards;}
-.zoom{animation:zoom 2s forwards;}
-.pulse{animation:pulse 2s forwards;}
-.slide{animation:slide 2s forwards;}
-.blur{animation:blur 2s forwards;}
-
-@keyframes fade{
-0%{opacity:0}
-100%{opacity:1}
-}
-
-@keyframes zoom{
-0%{opacity:0;transform:scale(.8)}
-100%{opacity:1;transform:scale(1)}
-}
-
-@keyframes pulse{
-0%{opacity:0;transform:scale(.9)}
-50%{transform:scale(1.05)}
-100%{opacity:1;transform:scale(1)}
-}
-
-@keyframes slide{
-0%{opacity:0;transform:translateY(40px)}
-100%{opacity:1;transform:translateY(0)}
-}
-
-@keyframes blur{
-0%{opacity:0;filter:blur(8px)}
-100%{opacity:1;filter:blur(0)}
-}
-
-/* NOTE */
+/* NOTE SLIDE */
 
 .noteBox{
 background:white;
 padding:40px;
 border-radius:15px;
 box-shadow:0 10px 30px rgba(0,0,0,0.2);
-animation:noteSlide .8s ease;
+animation:noteSlide .9s ease;
 }
 
 @keyframes noteSlide{
 
 0%{
-transform:translateY(-100px);
+transform:translateY(-120px);
 opacity:0;
 }
 
@@ -128,19 +94,12 @@ animation:glow 3s infinite alternate;
 
 @keyframes glow{
 
-0%{
-opacity:.6;
-transform:translateX(-50%) scale(1);
-}
-
-100%{
-opacity:1;
-transform:translateX(-50%) scale(1.05);
-}
+0%{opacity:.6}
+100%{opacity:1}
 
 }
 
-/* HEART FLOAT */
+/* HEARTS */
 
 .heart{
 position:fixed;
@@ -175,13 +134,8 @@ animation:flowerFall 7s linear infinite;
 
 @keyframes flowerFall{
 
-0%{
-transform:translateY(0) rotate(0deg);
-}
-
-100%{
-transform:translateY(110vh) rotate(360deg);
-}
+0%{transform:translateY(0) rotate(0deg)}
+100%{transform:translateY(110vh) rotate(360deg)}
 
 }
 
@@ -250,29 +204,33 @@ const data=JSON.parse(localStorage.getItem(id))
 
 show(1)
 
-/* SMOOTH TYPING */
+/* WORD BY WORD REVEAL */
 
-function typeText(el,text){
+function typeText(el,text,speed=130){
+
+el.innerHTML=""
+const words=text.split(" ")
 
 let i=0
-el.innerHTML=""
 
-function typing(){
+function reveal(){
 
-if(i<text.length){
+if(i<words.length){
 
-el.innerHTML+=text.charAt(i)
+el.innerHTML+=words[i]+" "
 i++
 
-setTimeout(typing,160)
+setTimeout(reveal,speed)
 
 }
 
 }
 
-typing()
+reveal()
 
 }
+
+/* PAGE TEXT */
 
 typeText(document.getElementById("creatorText"),"Website Created By "+data.creator+" ❤️")
 typeText(document.getElementById("playText"),"Play Music?")
@@ -284,8 +242,10 @@ typeText(document.getElementById("seeText"),"Do you want to see what I made?")
 typeText(document.getElementById("lightText"),"Turn On Light 💡")
 
 function show(n){
+
 document.querySelectorAll(".page").forEach(p=>p.style.display="none")
 document.getElementById("p"+n).style.display="block"
+
 }
 
 /* NOTE */
@@ -305,11 +265,14 @@ function showNote(text){
 document.querySelectorAll(".page").forEach(p=>p.style.display="none")
 
 const div=document.createElement("div")
-
 div.className="noteBox"
-div.innerHTML="<h3>"+text+"</h3>"
 
+const noteText=document.createElement("h3")
+
+div.appendChild(noteText)
 document.body.appendChild(div)
+
+typeText(noteText,text,140)
 
 setTimeout(()=>{
 div.remove()
@@ -354,7 +317,6 @@ alert("Why not? 😠")
 /* PHOTO SLIDE */
 
 let index=0
-const effects=["fade","zoom","pulse","slide","blur"]
 
 function startSlide(){
 
@@ -367,13 +329,12 @@ function slide(){
 
 const img=document.getElementById("slide")
 
-img.className=""
 img.src=data.photos[index]
 
-const effect=effects[index % effects.length]
+img.style.opacity=0
 
 setTimeout(()=>{
-img.classList.add(effect)
+img.style.opacity=1
 },100)
 
 index++
@@ -389,7 +350,6 @@ setTimeout(slide,2000)
 function createHeart(){
 
 const heart=document.createElement("div")
-
 heart.className="heart"
 heart.innerHTML="❤️"
 
@@ -410,7 +370,6 @@ setInterval(createHeart,800)
 function createFlower(){
 
 const flower=document.createElement("div")
-
 flower.className="flower"
 flower.innerHTML="🌸"
 
