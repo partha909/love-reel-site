@@ -1,81 +1,57 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>Love Reel</title>
+<title>Create Love Reel</title>
 
 <style>
 
 body{
-margin:0;
 font-family:Arial;
-background:linear-gradient(135deg,#ff6a88,#ff99ac);
+background:linear-gradient(135deg,#ff4d6d,#ff758f);
+height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
-min-height:100vh;
+margin:0;
 }
 
-.container{
+.card{
 background:white;
-width:360px;
-padding:25px;
+padding:30px;
+width:350px;
 border-radius:15px;
-text-align:center;
 box-shadow:0 10px 30px rgba(0,0,0,0.2);
+text-align:center;
 }
 
 h2{
 color:#ff4d6d;
-animation:fadeText 3s ease;
 }
 
-@keyframes fadeText{
-0%{opacity:0;transform:translateY(30px)}
-100%{opacity:1;transform:translateY(0)}
+input{
+width:100%;
+padding:10px;
+margin:8px 0;
+border-radius:8px;
+border:1px solid #ccc;
 }
 
 button{
-padding:12px 25px;
-margin:10px;
-border:none;
-border-radius:25px;
 background:#ff4d6d;
 color:white;
+padding:12px;
+border:none;
+border-radius:25px;
+width:100%;
 font-size:16px;
 cursor:pointer;
 }
 
-.storyPage{
-display:none;
-text-align:center;
-animation:fadePage 2s ease;
-}
-
-@keyframes fadePage{
-0%{opacity:0}
-100%{opacity:1}
-}
-
-#slide{
-width:300px;
-border-radius:12px;
-animation:photoZoom 5s ease forwards;
-}
-
-@keyframes photoZoom{
-0%{opacity:0;transform:scale(.9)}
-40%{opacity:1}
-100%{transform:scale(1.1)}
-}
-
-.credit{
-display:none;
-text-align:center;
-font-size:24px;
+#linkBox{
+margin-top:15px;
+word-break:break-all;
+color:green;
 }
 
 </style>
@@ -84,257 +60,93 @@ font-size:24px;
 
 <body>
 
-<div class="container" id="creatorPage">
+<div class="card">
 
 <h2>Create Love Reel ❤️</h2>
 
-<input id="nameInput" placeholder="Your Name"><br><br>
+<input id="creator" placeholder="Your Name">
 
-<input type="file" id="music" accept="audio/*"><br><br>
+<input id="lover" placeholder="Lover Name">
 
-<input type="file" id="photos" multiple accept="image/*"><br><br>
+<label>Upload Photos (1-20)</label>
+<input type="file" id="photos" multiple>
 
-<button onclick="startStory()">Create Reel 💖</button>
+<label>Upload Music</label>
+<input type="file" id="music">
 
-</div>
+<button onclick="createReel()">Generate Love Link</button>
 
-
-<div class="storyPage" id="page1">
-
-<h2 id="creatorText"></h2>
-
-<button onclick="showPage(2)">Next ➡️</button>
+<div id="linkBox"></div>
 
 </div>
 
-
-<div class="storyPage" id="page2">
-
-<h2>Play Music? 🎵</h2>
-
-<button onclick="playMusic()">YES ❤️</button>
-
-<button onclick="alert('Try Again 😅 Please press YES!')">NO ❌</button>
-
-</div>
-
-
-<div class="storyPage" id="page3">
-
-<h2>It's Your Special Day 🎉</h2>
-
-<p>Because You Are Special To Me ❤️</p>
-
-<button onclick="showPage(4)">OK 😊</button>
-
-</div>
-
-
-<div class="storyPage" id="page4">
-
-<h2>I Made Something Special ✨</h2>
-
-<p>Because You Are Special To Me ❤️</p>
-
-<button onclick="showPage(5)">I Want To See 👀</button>
-
-<button onclick="alert('You Must See This 😡')">I Don't Want ❌</button>
-
-</div>
-
-
-<div class="storyPage" id="page5">
-
-<h2>Do You Want To See What I Made? 🎁</h2>
-
-<button onclick="showPage(6)">YES 😍</button>
-
-<button onclick="alert('You Must See This 😤')">NO ❌</button>
-
-</div>
-
-
-<div class="storyPage" id="page6">
-
-<h2>Turn The Light On 💡</h2>
-
-<button onclick="startSlideshow()">Light On ✨</button>
-
-</div>
-
-
-<div class="storyPage" id="slideshow">
-
-<h2>Our Memories ❤️</h2>
-
-<img id="slide">
-
-</div>
-
-
-<div class="credit" id="creditPage">
-
-<h2>Website Managed By</h2>
-
-<h2>Partha Saha</h2>
-
-<p>If you need more custom websites</p>
-
-<p>Contact on Telegram: @Partha909</p>
-
-</div>
-
-
-<audio id="song"></audio>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
 <script>
 
-let photos=[]
-let index=0
+const supabase = supabase.createClient(
+"https://wakqdyivbsayqcgptvwt.supabase.co",
+"sb_publishable_hmfrQQc8drLkV2hlN9c3pA_Vp9vC68h"
+)
 
-let recorder
-let chunks=[]
+async function createReel(){
 
-let canvas=document.createElement("canvas")
-canvas.width=1080
-canvas.height=1920
+let creator=document.getElementById("creator").value
+let lover=document.getElementById("lover").value
 
-function startRecording(){
+let photoFiles=document.getElementById("photos").files
+let musicFile=document.getElementById("music").files[0]
 
-let stream=canvas.captureStream(30)
-
-let options = {
-mimeType:"video/webm;codecs=vp8"
-}
-
-recorder=new MediaRecorder(stream,options)
-
-recorder.ondataavailable=e=>chunks.push(e.data)
-
-recorder.onstop=downloadVideo
-
-recorder.start()
-
-}
-
-function stopRecording(){
-recorder.stop()
-}
-
-function downloadVideo(){
-
-let blob=new Blob(chunks,{type:"video/webm"})
-
-let url=URL.createObjectURL(blob)
-
-let a=document.createElement("a")
-
-a.href=url
-a.download="love_reel_video.mp4"
-a.click()
-
-chunks=[]
-
-URL.revokeObjectURL(url)
-
-}
-
-function startStory(){
-
-let name=document.getElementById("nameInput").value
-
-if(name==""){
-alert("Enter your name")
+if(!creator||!lover||photoFiles.length==0||!musicFile){
+alert("Fill all fields")
 return
 }
 
-startRecording()
+let photoUrls=[]
 
-document.getElementById("creatorPage").style.display="none"
+for(let file of photoFiles){
 
-document.getElementById("creatorText").innerText="Website Created By "+name+" ❤️"
+let fileName=Date.now()+"_"+file.name
 
-showPage(1)
+await supabase.storage
+.from("love-reels")
+.upload(fileName,file)
 
-}
+let {data}=supabase.storage
+.from("love-reels")
+.getPublicUrl(fileName)
 
-function showPage(n){
-
-document.querySelectorAll(".storyPage").forEach(p=>p.style.display="none")
-
-let page=document.getElementById("page"+n)
-
-if(page) page.style.display="block"
+photoUrls.push(data.publicUrl)
 
 }
 
-function playMusic(){
+let musicName=Date.now()+"_"+musicFile.name
 
-let file=document.getElementById("music").files[0]
+await supabase.storage
+.from("love-reels")
+.upload(musicName,musicFile)
 
-if(!file){
-alert("Upload music first 🎵")
-return
-}
+let {data:musicData}=supabase.storage
+.from("love-reels")
+.getPublicUrl(musicName)
 
-let song=document.getElementById("song")
+let musicUrl=musicData.publicUrl
 
-song.src=URL.createObjectURL(file)
+let {data,error}=await supabase
+.from("reels")
+.insert({
+creator_name:creator,
+lover_name:lover,
+music_url:musicUrl,
+photos:photoUrls
+})
+.select()
 
-song.play()
+let id=data[0].id
 
-showPage(3)
+let link=window.location.origin+"/view.html?id="+id
 
-}
-
-function startSlideshow(){
-
-let files=document.getElementById("photos").files
-
-if(files.length==0){
-alert("Upload photos first 📷")
-return
-}
-
-photos=[]
-
-for(let i=0;i<files.length;i++){
-photos.push(URL.createObjectURL(files[i]))
-}
-
-document.querySelectorAll(".storyPage").forEach(p=>p.style.display="none")
-
-document.getElementById("slideshow").style.display="block"
-
-slide()
-
-}
-
-function slide(){
-
-if(index>=photos.length){
-
-document.getElementById("slideshow").style.display="none"
-
-document.getElementById("creditPage").style.display="block"
-
-stopRecording()
-
-return
-}
-
-let img=document.getElementById("slide")
-
-img.style.animation="none"
-
-setTimeout(()=>{
-img.src=photos[index]
-img.style.animation="photoZoom 5s ease forwards"
-},50)
-
-index++
-
-setTimeout(slide,5000)
+document.getElementById("linkBox").innerHTML="Love Link:<br>"+link
 
 }
 
