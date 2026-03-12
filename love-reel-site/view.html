@@ -19,7 +19,7 @@ align-items:center;
 min-height:100vh;
 }
 
-.container{
+.box{
 background:white;
 width:360px;
 padding:25px;
@@ -33,7 +33,7 @@ display:none;
 }
 
 button{
-padding:10px 20px;
+padding:10px 18px;
 border:none;
 background:#ff4d6d;
 color:white;
@@ -47,25 +47,45 @@ width:100%;
 border-radius:10px;
 }
 
+.popup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.5);
+display:none;
+justify-content:center;
+align-items:center;
+}
+
+.popupBox{
+background:white;
+padding:20px;
+border-radius:10px;
+width:260px;
+text-align:center;
+}
+
 </style>
 
 </head>
 
 <body>
 
-<div class="container">
+<div class="box">
 
 <!-- PAGE 1 -->
-<div class="page" id="page1">
+<div class="page" id="p1">
 
 <h2 id="creatorText"></h2>
 
-<button onclick="showPage(2)">Next ➡️</button>
+<button onclick="show(2)">Next</button>
 
 </div>
 
 <!-- PAGE 2 -->
-<div class="page" id="page2">
+<div class="page" id="p2">
 
 <h2>Play Music 🎵</h2>
 
@@ -74,48 +94,82 @@ border-radius:10px;
 </div>
 
 <!-- PAGE 3 -->
-<div class="page" id="page3">
+<div class="page" id="p3">
 
-<h2>Do you like this surprise? ❤️</h2>
+<h2>It's Your Special Day 🎉</h2>
+
+<p>Because you are special to me ❤️</p>
+
+<button onclick="show(4)">OK</button>
+
+</div>
+
+<!-- PAGE 4 -->
+<div class="page" id="p4">
+
+<h2>I Had To Make Something Special</h2>
+
+<p>Because you are special to me ❤️</p>
+
+<button onclick="show(5)">I Want To See</button>
+
+<button onclick="angry()">I Don't Want To See</button>
+
+</div>
+
+<!-- PAGE 5 -->
+<div class="page" id="p5">
+
+<h2>Do You Want To See What I Made?</h2>
 
 <button onclick="romantic()">YES</button>
 
 <button onclick="angry()">NO</button>
 
-<p id="response"></p>
+<p id="reply"></p>
 
-<button id="nextAfterResponse" style="display:none" onclick="showPage(4)">
-Next ➡️
+<button id="nextBtn" style="display:none" onclick="show(6)">
+Next
 </button>
 
 </div>
 
-<!-- PAGE 4 -->
-<div class="page" id="page4">
+<!-- PAGE 6 -->
+<div class="page" id="p6">
 
-<h2>Turn On Light 💡</h2>
+<h2>Turn On The Light 💡</h2>
 
-<button onclick="startSlideshow()">Light On</button>
+<button onclick="startSlide()">Light On</button>
 
 </div>
 
-<!-- PAGE 5 -->
-<div class="page" id="page5">
-
-<h2>Our Memories ❤️</h2>
+<!-- PAGE 7 -->
+<div class="page" id="p7">
 
 <img id="slide">
 
 </div>
 
-<!-- PAGE 6 -->
-<div class="page" id="page6">
+<!-- PAGE 8 -->
+<div class="page" id="p8">
 
-<h2>Website Owner</h2>
+<h3>Website Owner</h3>
 
 <p>Partha Saha</p>
 
 <p>Contact Telegram: @Partha909</p>
+
+</div>
+
+</div>
+
+<div class="popup" id="popup">
+
+<div class="popupBox">
+
+<p id="popupText"></p>
+
+<button onclick="closePopup()">OK</button>
 
 </div>
 
@@ -126,59 +180,65 @@ Next ➡️
 <script>
 
 const params=new URLSearchParams(window.location.search)
-
 const id=params.get("id")
-
 const data=JSON.parse(localStorage.getItem(id))
 
 document.getElementById("creatorText").innerText=
 "Website Created By "+data.creator+" ❤️"
 
-showPage(1)
+show(1)
 
-function showPage(n){
+function show(n){
 
 document.querySelectorAll(".page").forEach(p=>p.style.display="none")
 
-document.getElementById("page"+n).style.display="block"
+document.getElementById("p"+n).style.display="block"
 
 }
 
 function playMusic(){
 
 const player=document.getElementById("player")
-
 player.src=data.music
-
 player.play()
 
-showPage(3)
+document.getElementById("popupText").innerText=
+"Thank you shona ❤️"
+
+document.getElementById("popup").style.display="flex"
+
+}
+
+function closePopup(){
+
+document.getElementById("popup").style.display="none"
+show(3)
 
 }
 
 function romantic(){
 
-document.getElementById("response").innerText=
-"Aww ❤️ You are the most special person in my life."
+document.getElementById("reply").innerText=
+"You are the most special person in my life ❤️"
 
-document.getElementById("nextAfterResponse").style.display="block"
+document.getElementById("nextBtn").style.display="block"
 
 }
 
 function angry(){
 
-document.getElementById("response").innerText=
-"😡 How can you say NO! Just see the surprise!"
+document.getElementById("popupText").innerText=
+"😡 Come on! You must see this surprise!"
 
-document.getElementById("nextAfterResponse").style.display="block"
+document.getElementById("popup").style.display="flex"
 
 }
 
 let index=0
 
-function startSlideshow(){
+function startSlide(){
 
-showPage(5)
+show(7)
 
 slide()
 
@@ -195,13 +255,13 @@ index++
 if(index>=data.photos.length){
 
 setTimeout(()=>{
-showPage(6)
+show(8)
 },2000)
 
 return
 }
 
-setTimeout(slide,1500)
+setTimeout(slide,2000)
 
 }
 
