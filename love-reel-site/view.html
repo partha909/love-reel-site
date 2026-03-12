@@ -1,164 +1,32 @@
-<!DOCTYPE html>
-<html>
-<head>
+const supabaseUrl = "https://wakqdyivbsayqcgptvwt.supabase.co"
+const supabaseKey = "sb_publishable_hmfrQQc8drLkV2hlN9c3pA_Vp9vC68h"
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>Love Reel</title>
-
-<style>
-
-body{
-margin:0;
-font-family:Arial;
-background:linear-gradient(135deg,#ff6a88,#ff99ac);
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-text-align:center;
-color:white;
-overflow:hidden;
-}
-
-.page{
-display:none;
-animation:fade 2s ease;
-}
-
-@keyframes fade{
-0%{opacity:0;transform:translateY(30px)}
-100%{opacity:1;transform:translateY(0)}
-}
-
-button{
-padding:12px 25px;
-margin-top:20px;
-border:none;
-border-radius:25px;
-background:#ff4d6d;
-color:white;
-font-size:16px;
-cursor:pointer;
-}
-
-img{
-width:250px;
-border-radius:12px;
-margin-top:15px;
-animation:zoom 5s ease forwards;
-}
-
-@keyframes zoom{
-0%{transform:scale(.9)}
-100%{transform:scale(1.1)}
-}
-
-</style>
-
-</head>
-
-<body>
-
-<div id="page1" class="page">
-<h1 id="creatorText"></h1>
-<button onclick="nextPage(2)">Next ➡️</button>
-</div>
-
-<div id="page2" class="page">
-<h1>Play Music? 🎵</h1>
-<button onclick="playMusic()">YES ❤️</button>
-<button onclick="alert('Press YES 😅')">NO ❌</button>
-</div>
-
-<div id="page3" class="page">
-<h1>It's Your Special Day 🎉</h1>
-<p>Because You Are Special To Me ❤️</p>
-<button onclick="nextPage(4)">OK 😊</button>
-</div>
-
-<div id="page4" class="page">
-<h1>I Made Something Special ✨</h1>
-<p>Because You Are Special To Me ❤️</p>
-<button onclick="nextPage(5)">Show Me 👀</button>
-</div>
-
-<div id="page5" class="page">
-<h1>Do You Want To See What I Made? 🎁</h1>
-<button onclick="nextPage(6)">YES 😍</button>
-</div>
-
-<div id="page6" class="page">
-<h1>Turn The Light On 💡</h1>
-<button onclick="startSlide()">Light On ✨</button>
-</div>
-
-<div id="page7" class="page">
-<h1>❤️ Our Memories ❤️</h1>
-<img id="slide">
-</div>
-
-<audio id="song"></audio>
-
-<script>
-
-function nextPage(n){
-
-document.querySelectorAll(".page").forEach(p=>p.style.display="none")
-
-document.getElementById("page"+n).style.display="block"
-
-}
+const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey)
 
 const params = new URLSearchParams(window.location.search)
+const id = params.get("id")
 
-const creator = params.get("creator")
+async function loadReel(){
+
+const { data } = await supabaseClient
+.from("reels")
+.select("*")
+.eq("id", id)
+.single()
 
 document.getElementById("creatorText").innerText =
-"Website Created By " + creator + " ❤️"
+"Website Created By " + data.creator + " ❤️"
 
-nextPage(1)
+const { data:musicUrl } =
+supabaseClient.storage
+.from("love-files")
+.getPublicUrl(data.music)
 
-function playMusic(){
+document.getElementById("song").src =
+musicUrl.publicUrl
 
-const song=document.getElementById("song")
-
-song.src=localStorage.getItem("musicData")
-
-song.play()
-
-nextPage(3)
+photos = data.photos
 
 }
 
-let photos=JSON.parse(localStorage.getItem("photoData")||"[]")
-
-let index=0
-
-function startSlide(){
-
-nextPage(7)
-
-showPhoto()
-
-}
-
-function showPhoto(){
-
-if(index>=photos.length)return
-
-const img=document.getElementById("slide")
-
-img.src=photos[index]
-
-index++
-
-setTimeout(showPhoto,4000)
-
-}
-
-</script>
-
-</body>
-</html>
+loadReel()
