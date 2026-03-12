@@ -19,8 +19,6 @@ justify-content:center;
 align-items:center;
 }
 
-/* UI */
-
 .box{
 width:100%;
 height:100vh;
@@ -32,11 +30,7 @@ text-align:center;
 padding:20px;
 }
 
-/* PAGE */
-
 .page{display:none}
-
-/* BUTTON */
 
 button{
 padding:12px 20px;
@@ -47,32 +41,34 @@ border-radius:20px;
 margin-top:15px;
 cursor:pointer;
 opacity:0;
-transform:scale(.8);
-transition:.4s;
 }
 
-button.show{
-opacity:1;
-animation:jumpDown .6s ease;
-transform:scale(1);
+/* BUTTON ANIMATIONS */
+
+.btnDrop{animation:dropBtn .8s ease forwards;}
+@keyframes dropBtn{
+0%{transform:translateY(-120px);opacity:0;}
+70%{transform:translateY(10px);}
+100%{transform:translateY(0);opacity:1;}
 }
 
-@keyframes jumpDown{
-
-0%{
-transform:translateY(-60px) scale(.8);
-opacity:0;
+.btnRight{animation:rightBtn .8s ease forwards;}
+@keyframes rightBtn{
+0%{transform:translateX(150px);opacity:0;}
+100%{transform:translateX(0);opacity:1;}
 }
 
-70%{
-transform:translateY(10px) scale(1.1);
+.btnLeft{animation:leftBtn .8s ease forwards;}
+@keyframes leftBtn{
+0%{transform:translateX(-150px);opacity:0;}
+100%{transform:translateX(0);opacity:1;}
 }
 
-100%{
-transform:translateY(0);
-opacity:1;
-}
-
+.btnBounce{animation:bounceBtn .8s ease forwards;}
+@keyframes bounceBtn{
+0%{transform:scale(0);opacity:0;}
+70%{transform:scale(1.2);}
+100%{transform:scale(1);opacity:1;}
 }
 
 /* CURSOR */
@@ -108,6 +104,14 @@ z-index:10;
 img{
 width:80%;
 border-radius:12px;
+animation:photoAnim 3s ease;
+}
+
+@keyframes photoAnim{
+0%{opacity:0;transform:scale(0.8);}
+40%{opacity:1;transform:scale(1.05);}
+70%{transform:scale(0.95);}
+100%{transform:scale(1);}
 }
 
 /* HEART */
@@ -154,7 +158,7 @@ animation:flowerFall 7s linear infinite;
 <div class="page" id="p2">
 <h3 id="playText"></h3>
 <button id="playBtn" onclick="playMusic()">Play</button>
-<button id="notBtn" onclick="angry()">Not Play</button>
+<button id="notBtn" onclick="angryPlay()">Not Play</button>
 </div>
 
 <div class="page" id="p3">
@@ -167,13 +171,13 @@ animation:flowerFall 7s linear infinite;
 <h3 id="makeText"></h3>
 <p id="makeSub"></p>
 <button id="excitedBtn" onclick="excited()">I Am Excited</button>
-<button id="noBtn" onclick="angry()">Not Excited</button>
+<button id="noBtn" onclick="angryExcited()">Not Excited</button>
 </div>
 
 <div class="page" id="p5">
 <h3 id="seeText"></h3>
 <button id="yesBtn" onclick="romantic()">Yes</button>
-<button id="noBtn2" onclick="angry()">No</button>
+<button id="noBtn2" onclick="angrySee()">No</button>
 </div>
 
 <div class="page" id="p6">
@@ -230,7 +234,7 @@ setTimeout(typing,speed)
 cursor.remove()
 
 buttons.forEach(btn=>{
-btn.classList.add("show")
+btn.classList.add("btnBounce")
 })
 
 }
@@ -357,8 +361,18 @@ function romantic(){
 showNote("You Are The Most Special Person In My Life ❤️",6)
 }
 
-function angry(){
-alert("Why Not? 😠")
+/* NEGATIVE REPLIES */
+
+function angryPlay(){
+showNote("Oh no... please play the music once 😔",2)
+}
+
+function angryExcited(){
+showNote("Really? I made this with so much love 💔",4)
+}
+
+function angrySee(){
+showNote("Come on... you should see it at least once 😟",5)
 }
 
 /* PHOTO */
