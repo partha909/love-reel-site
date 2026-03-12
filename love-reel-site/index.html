@@ -1,38 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>Create Love Link</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="script.js" defer></script>
 
 <style>
-
 body{
 font-family:Arial;
 background:#ff99ac;
 display:flex;
 justify-content:center;
 align-items:center;
-min-height:100vh;
+height:100vh;
 }
 
 .box{
 background:white;
 padding:25px;
-border-radius:12px;
 width:360px;
+border-radius:12px;
 text-align:center;
-}
-
-input{
-width:90%;
-padding:10px;
-margin:6px;
 }
 
 button{
@@ -42,13 +34,14 @@ color:white;
 border:none;
 border-radius:6px;
 cursor:pointer;
+margin-top:5px;
 }
 
 .progress{
 height:8px;
 background:#eee;
-margin-top:6px;
 border-radius:6px;
+margin-top:5px;
 }
 
 .bar{
@@ -57,48 +50,37 @@ width:0%;
 background:#ff4d6d;
 border-radius:6px;
 }
-
 </style>
-
 </head>
 
 <body>
 
 <div class="box">
 
-<h2>Create Love Link ❤️</h2>
+<h3>Create Love Link ❤️</h3>
 
-<input id="creator" placeholder="Your Name">
-
-<input id="lover" placeholder="Lover Name">
+<input id="creator" placeholder="Your Name"><br>
+<input id="lover" placeholder="Lover Name"><br>
 
 <br>
 
-Music
-
+Music<br>
 <input type="file" id="musicFile">
-
-<button onclick="uploadMusic()">Upload Music</button>
-
+<button id="uploadMusic">Upload Music</button>
 <div class="progress"><div id="musicBar" class="bar"></div></div>
 
-<br>
+<br><br>
 
-Photos
-
+Photos<br>
 <input type="file" id="photoFiles" multiple>
-
-<button onclick="uploadPhotos()">Upload Photos</button>
-
+<button id="uploadPhotos">Upload Photos</button>
 <div class="progress"><div id="photoBar" class="bar"></div></div>
 
-<br>
+<br><br>
 
-<button id="generateBtn" onclick="generateLink()" style="display:none">
-Generate Love Link ❤️
-</button>
+<button id="generateBtn" disabled>Generate Love Link</button>
 
-<p id="link"></p>
+<p id="result"></p>
 
 </div>
 
