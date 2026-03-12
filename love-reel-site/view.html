@@ -36,46 +36,27 @@ border:none;
 background:#ff4d6d;
 color:white;
 border-radius:20px;
-margin-top:10px;
+margin-top:12px;
 cursor:pointer;
+opacity:0;
+transition:0.6s;
 }
 
-img{
+button.show{
+opacity:1;
+}
+
+#slide{
 width:100%;
 border-radius:10px;
 opacity:0;
+transform:scale(0.85);
+transition:1.5s;
 }
 
-.fade{animation:fade 2s forwards;}
-.zoom{animation:zoom 2s forwards;}
-.pulse{animation:pulse 2s forwards;}
-.slide{animation:slide 2s forwards;}
-.blur{animation:blur 2s forwards;}
-
-@keyframes fade{
-0%{opacity:0;}
-100%{opacity:1;}
-}
-
-@keyframes zoom{
-0%{opacity:0;transform:scale(0.8);}
-100%{opacity:1;transform:scale(1);}
-}
-
-@keyframes pulse{
-0%{opacity:0;transform:scale(0.9);}
-50%{transform:scale(1.05);}
-100%{opacity:1;transform:scale(1);}
-}
-
-@keyframes slide{
-0%{opacity:0;transform:translateY(40px);}
-100%{opacity:1;transform:translateY(0);}
-}
-
-@keyframes blur{
-0%{opacity:0;filter:blur(8px);}
-100%{opacity:1;filter:blur(0);}
+#slide.show{
+opacity:1;
+transform:scale(1);
 }
 
 .popup{
@@ -107,46 +88,49 @@ text-align:center;
 <div class="box">
 
 <div class="page" id="p1">
-<h2 id="creatorText"></h2>
-<button onclick="show(2)">Next</button>
+<h2 id="t1"></h2>
+<button id="b1" onclick="show(2)">Next</button>
 </div>
 
 <div class="page" id="p2">
 <h3>Play Music? 🎵</h3>
 <button onclick="playMusic()">Play</button>
-<button onclick="angry('Why not play the music? 😠')">Not Play</button>
+<button onclick="angry()">Not Play</button>
 </div>
 
 <div class="page" id="p3">
-<p>You are very special to me ❤️</p>
-<button onclick="show(4)">Next</button>
+<h3 id="t2"></h3>
+<button id="b2" onclick="show(4)">Next</button>
 </div>
 
 <div class="page" id="p4">
-<h3>It's Your Special Day 🎉</h3>
-<p>Because you are special to me</p>
-<button onclick="show(5)">Thank You ❤️</button>
+<h3 id="t3"></h3>
+<button onclick="excited()">I'm Excited 😊</button>
+<button onclick="angry()">I Don't Want</button>
 </div>
 
 <div class="page" id="p5">
-<h3>I Had To Make Something Special</h3>
-<p>Because you are special to me</p>
-<button onclick="excited()">I'm Excited 😊</button>
-<button onclick="angry('You don’t want it? 😡')">I Don’t Want To See</button>
+<p id="note1"></p>
+<button id="b3" onclick="show(6)">Next</button>
 </div>
 
 <div class="page" id="p6">
-<h3>Do You Want To See What I Made?</h3>
+<h3>Do you want to see what I made?</h3>
 <button onclick="romantic()">Yes</button>
-<button onclick="angry('You must see it! 😡')">No</button>
+<button onclick="angry()">No</button>
 </div>
 
 <div class="page" id="p7">
+<p id="note2"></p>
+<button id="b4" onclick="show(8)">Next</button>
+</div>
+
+<div class="page" id="p8">
 <h3>Turn On The Light 💡</h3>
 <button onclick="startSlide()">Light On</button>
 </div>
 
-<div class="page" id="p8">
+<div class="page" id="p9">
 <img id="slide">
 </div>
 
@@ -167,59 +151,109 @@ const params=new URLSearchParams(window.location.search)
 const id=params.get("id")
 const data=JSON.parse(localStorage.getItem(id))
 
-document.getElementById("creatorText").innerText=
-"Website Created By "+data.creator+" ❤️"
+function typeText(el,text,speed,callback){
 
-show(1)
+let i=0
+el.innerHTML=""
+
+const timer=setInterval(()=>{
+
+el.innerHTML+=text.charAt(i)
+i++
+
+if(i>=text.length){
+clearInterval(timer)
+if(callback)callback()
+}
+
+},speed)
+
+}
 
 function show(n){
 document.querySelectorAll(".page").forEach(p=>p.style.display="none")
 document.getElementById("p"+n).style.display="block"
 }
 
+function start(){
+
+show(1)
+
+typeText(
+document.getElementById("t1"),
+"Website Created By "+data.creator+" ❤️",
+80,
+()=>{
+document.getElementById("b1").classList.add("show")
+}
+)
+
+}
+
 function playMusic(){
+
 const player=document.getElementById("player")
 player.src=data.music
 player.play()
+
+typeText(
+document.getElementById("t2"),
+"You are very special to me ❤️",
+80,
+()=>{
+document.getElementById("b2").classList.add("show")
+}
+)
+
 show(3)
+
 }
 
-function angry(text){
-document.getElementById("popupText").innerText=text
+function excited(){
+
+typeText(
+document.getElementById("note1"),
+"That makes me really happy ❤️",
+80,
+()=>{
+document.getElementById("b3").classList.add("show")
+}
+)
+
+show(5)
+
+}
+
+function romantic(){
+
+typeText(
+document.getElementById("note2"),
+"You are the most special person in my life ❤️",
+80,
+()=>{
+document.getElementById("b4").classList.add("show")
+}
+)
+
+show(7)
+
+}
+
+function angry(){
+
+document.getElementById("popupText").innerText="Why not? 😠"
 document.getElementById("popup").style.display="flex"
+
 }
 
 function closePopup(){
 document.getElementById("popup").style.display="none"
 }
 
-function excited(){
-document.getElementById("popupText").innerText=
-"That makes me so happy ❤️"
-document.getElementById("popup").style.display="flex"
-
-setTimeout(()=>{
-closePopup()
-show(6)
-},2000)
-}
-
-function romantic(){
-document.getElementById("popupText").innerText=
-"You are the most special person in my life ❤️"
-document.getElementById("popup").style.display="flex"
-
-setTimeout(()=>{
-closePopup()
-show(7)
-},2000)
-}
-
 let index=0
-const effects=["fade","zoom","pulse","slide","blur"]
 
 function startSlide(){
-show(8)
+show(9)
 slide()
 }
 
@@ -227,25 +261,24 @@ function slide(){
 
 const img=document.getElementById("slide")
 
-img.className=""
-
 img.src=data.photos[index]
 
-const effect=effects[index % effects.length]
+img.classList.remove("show")
 
 setTimeout(()=>{
-img.classList.add(effect)
+img.classList.add("show")
 },100)
 
 index++
 
 if(index>=data.photos.length)return
 
-setTimeout(slide,2500)
+setTimeout(slide,3500)
 
 }
 
-</script>
+start()
 
+</script>
 </body>
 </html>
