@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Love Reel</title>
+<title>Love Reel Creator</title>
 
 <style>
 
@@ -28,10 +28,6 @@ text-align:center;
 box-shadow:0 10px 30px rgba(0,0,0,0.2);
 }
 
-h2{
-color:#ff4d6d;
-}
-
 input{
 width:90%;
 padding:10px;
@@ -42,7 +38,7 @@ border:1px solid #ccc;
 
 button{
 padding:12px 25px;
-margin-top:15px;
+margin-top:10px;
 border:none;
 border-radius:25px;
 background:#ff4d6d;
@@ -51,9 +47,10 @@ font-size:16px;
 cursor:pointer;
 }
 
-.storyPage{
-display:none;
-text-align:center;
+#generatedLink{
+word-break:break-all;
+margin-top:10px;
+color:#ff4d6d;
 }
 
 </style>
@@ -62,12 +59,11 @@ text-align:center;
 
 <body>
 
-<div class="container" id="creatorPage">
+<div class="container">
 
 <h2>Create Love Reel ❤️</h2>
 
 <input id="nameInput" placeholder="Your Name">
-
 <input id="loverInput" placeholder="Lover Name">
 
 <br>
@@ -80,36 +76,15 @@ text-align:center;
 
 <br>
 
-<button id="generateBtn">
-Generate Love Link ❤️
-</button>
+<button id="uploadBtn">Upload Files 📤</button>
+
+<p id="uploadStatus"></p>
+
+<button id="generateBtn">Generate Love Link ❤️</button>
 
 <p id="generatedLink"></p>
 
 </div>
-
-
-<div class="container storyPage" id="page1">
-
-<h2 id="creatorText"></h2>
-
-<button onclick="showPage(2)">Next ➡️</button>
-
-</div>
-
-
-<div class="container storyPage" id="page2">
-
-<h2>Play Music? 🎵</h2>
-
-<button onclick="playMusic()">YES ❤️</button>
-
-<button onclick="alert('Try Again 😅 Please press YES!')">NO ❌</button>
-
-</div>
-
-
-<audio id="song"></audio>
 
 <script src="script.js"></script>
 
