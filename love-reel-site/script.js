@@ -1,143 +1,83 @@
-let musicUploaded=false
-let photosUploaded=false
+const supabase = window.supabase.createClient(
+"https://wakqdyivbsayqcgptvwt.supabase.co",
+"sb_publishable_hmfrQQc8drLkV2hlN9c3pA_Vp9vC68h"
+)
 
 let musicURL=""
 let photoURLs=[]
 
-// music upload
+async function uploadMusic(){
 
-document.getElementById("uploadMusic").onclick=()=>{
-
-const file=document.getElementById("musicFile").files[0]
+const file=document.getElementById("music").files[0]
 
 if(!file){
-alert("Choose music")
+alert("Select music first")
 return
 }
 
-const bar=document.getElementById("musicBar")
+const path="music/"+Date.now()+"_"+file.name
 
-let p=0
+await supabase.storage
+.from("love-reels")
+.upload(path,file)
 
-const interval=setInterval(()=>{
-
-p+=10
-
-bar.style.width=p+"%"
-
-if(p>=100){
-
-clearInterval(interval)
-
-musicUploaded=true
-
-musicURL=URL.createObjectURL(file)
+musicURL=supabase.storage
+.from("love-reels")
+.getPublicUrl(path).data.publicUrl
 
 checkReady()
 
 }
 
-},200)
+async function uploadPhotos(){
 
-}
+const files=document.getElementById("photos").files
 
-// photo upload
+for(let file of files){
 
-document.getElementById("uploadPhotos").onclick=()=>{
+const path="photos/"+Date.now()+"_"+file.name
 
-const files=document.getElementById("photoFiles").files
+await supabase.storage
+.from("love-reels")
+.upload(path,file)
 
-if(files.length===0){
-alert("Choose photos")
-return
-}
-
-const bar=document.getElementById("photoBar")
-
-let p=0
-
-const interval=setInterval(()=>{
-
-p+=10
-
-bar.style.width=p+"%"
-
-if(p>=100){
-
-clearInterval(interval)
-
-photosUploaded=true
-
-photoURLs=[]
-
-const preview=document.getElementById("photoPreview")
-
-preview.innerHTML=""
-
-for(let f of files){
-
-const url=URL.createObjectURL(f)
+const url=supabase.storage
+.from("love-reels")
+.getPublicUrl(path).data.publicUrl
 
 photoURLs.push(url)
 
-const img=document.createElement("img")
-
-img.src=url
-
-preview.appendChild(img)
-
 }
 
 checkReady()
 
 }
 
-},200)
-
-}
-
-// enable generate
-
 function checkReady(){
 
-if(musicUploaded && photosUploaded){
+if(musicURL && photoURLs.length>0){
 
-document.getElementById("generateLink").style.display="block"
-
-}
+document.getElementById("generateBtn").style.display="block"
 
 }
 
-// generate link
-
-document.getElementById("generateLink").onclick=()=>{
-
-const creator=document.getElementById("creatorName").value
-
-const lover=document.getElementById("loverName").value
-
-if(!creator || !lover){
-alert("Enter names")
-return
 }
+
+function generateLink(){
+
+const creator=document.getElementById("creator").value
+const lover=document.getElementById("lover").value
+
+const data={creator,lover,music:musicURL,photos:photoURLs}
 
 const id=Date.now().toString(36)
 
-localStorage.setItem(id,JSON.stringify({
-
-creator,
-lover,
-music:musicURL,
-photos:photoURLs
-
-}))
+localStorage.setItem(id,JSON.stringify(data))
 
 const link=window.location.origin+"/view.html?id="+id
 
-document.getElementById("linkBox").innerText=link
+document.getElementById("result").innerText=link
 
 navigator.clipboard.writeText(link)
-
-alert("Love link copied ❤️")
 
 }
