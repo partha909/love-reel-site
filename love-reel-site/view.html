@@ -21,8 +21,9 @@ min-height:100vh;
 
 .box{
 background:white;
-width:360px;
-padding:25px;
+width:420px;
+max-width:95%;
+padding:30px;
 border-radius:15px;
 text-align:center;
 box-shadow:0 10px 30px rgba(0,0,0,0.2);
@@ -38,24 +39,67 @@ color:white;
 border-radius:20px;
 margin-top:12px;
 cursor:pointer;
-display:none;
 }
 
 img{
 width:100%;
 border-radius:10px;
 opacity:0;
-transform:scale(0.9);
-transition:1.2s;
 }
 
-img.show{
-opacity:1;
-transform:scale(1);
+.fade{animation:fade 2s forwards;}
+.zoom{animation:zoom 2s forwards;}
+.pulse{animation:pulse 2s forwards;}
+.slide{animation:slide 2s forwards;}
+.blur{animation:blur 2s forwards;}
+
+@keyframes fade{
+0%{opacity:0}
+100%{opacity:1}
+}
+
+@keyframes zoom{
+0%{opacity:0;transform:scale(.8)}
+100%{opacity:1;transform:scale(1)}
+}
+
+@keyframes pulse{
+0%{opacity:0;transform:scale(.9)}
+50%{transform:scale(1.05)}
+100%{opacity:1;transform:scale(1)}
+}
+
+@keyframes slide{
+0%{opacity:0;transform:translateY(40px)}
+100%{opacity:1;transform:translateY(0)}
+}
+
+@keyframes blur{
+0%{opacity:0;filter:blur(8px)}
+100%{opacity:1;filter:blur(0)}
+}
+
+.popup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.6);
+display:none;
+justify-content:center;
+align-items:center;
+}
+
+.popupBox{
+background:white;
+padding:20px;
+border-radius:10px;
+width:260px;
+text-align:center;
 }
 
 </style>
-
 </head>
 
 <body>
@@ -63,52 +107,50 @@ transform:scale(1);
 <div class="box">
 
 <div class="page" id="p1">
-<h2 id="t1"></h2>
-<button id="next1" onclick="show(2)">Next</button>
+<h2 id="creatorText"></h2>
+<button onclick="show(2)">Next</button>
 </div>
 
 <div class="page" id="p2">
-<h3>Play Music? 🎵</h3>
-<button id="playBtn" onclick="playMusic()">Play</button>
-<button id="notPlayBtn" onclick="angry()">Not Play</button>
+<h3>Play Music?</h3>
+<button onclick="playMusic()">Play</button>
+<button onclick="angry()">Not Play</button>
 </div>
 
 <div class="page" id="p3">
-<h3 id="t2"></h3>
-<button id="next2" onclick="show(4)">Next</button>
+<h3>It's Your Special Day</h3>
+<p>Because you are special to me ❤️</p>
+<button onclick="thankYou()">Thank You ❤️</button>
 </div>
 
 <div class="page" id="p4">
-<h3 id="t3"></h3>
-<button id="excitedBtn" onclick="excited()">I'm Excited 😊</button>
-<button id="noBtn" onclick="angry()">I Don't Want</button>
+<h3>I had to make something special</h3>
+<p>Because you are special to me ❤️</p>
+<button onclick="excited()">I'm excited 😊</button>
+<button onclick="angry()">I'm not excited</button>
 </div>
 
 <div class="page" id="p5">
-<p id="note1"></p>
-<button id="next3" onclick="show(6)">Next</button>
+<h3>Do you want to see what I made?</h3>
+<button onclick="romantic()">Yes</button>
+<button onclick="angry()">No</button>
 </div>
 
 <div class="page" id="p6">
-<h3 id="t4"></h3>
-<button id="yesBtn" onclick="romantic()">Yes</button>
-<button id="noBtn2" onclick="angry()">No</button>
+<h3>Turn On Light 💡</h3>
+<button onclick="startSlide()">Light On</button>
 </div>
 
 <div class="page" id="p7">
-<p id="note2"></p>
-<button id="next4" onclick="show(8)">Next</button>
-</div>
-
-<div class="page" id="p8">
-<h3>Turn On The Light 💡</h3>
-<button id="lightBtn" onclick="startSlide()">Light On</button>
-</div>
-
-<div class="page" id="p9">
 <img id="slide">
 </div>
 
+</div>
+
+<div class="popup" id="popup">
+<div class="popupBox">
+<p id="popupText"></p>
+</div>
 </div>
 
 <audio id="player"></audio>
@@ -119,44 +161,28 @@ const params=new URLSearchParams(window.location.search)
 const id=params.get("id")
 const data=JSON.parse(localStorage.getItem(id))
 
-function typeText(el,text,speed,callback){
-
-let i=0
-el.innerHTML=""
-
-const timer=setInterval(()=>{
-
-el.innerHTML+=text.charAt(i)
-i++
-
-if(i>=text.length){
-clearInterval(timer)
-callback()
-}
-
-},speed)
-
-}
-
-function show(n){
-
-document.querySelectorAll(".page").forEach(p=>p.style.display="none")
-document.getElementById("p"+n).style.display="block"
-
-}
-
-function start(){
+document.getElementById("creatorText").innerText=
+"Website Created By "+data.creator+" ❤️"
 
 show(1)
 
-typeText(
-document.getElementById("t1"),
-"Website Created By "+data.creator+" ❤️",
-70,
-()=>{
-document.getElementById("next1").style.display="inline-block"
+function show(n){
+document.querySelectorAll(".page").forEach(p=>p.style.display="none")
+document.getElementById("p"+n).style.display="block"
 }
-)
+
+function romanticNote(text,nextPage){
+
+const popup=document.getElementById("popup")
+const popupText=document.getElementById("popupText")
+
+popupText.innerText=text
+popup.style.display="flex"
+
+setTimeout(()=>{
+popup.style.display="none"
+show(nextPage)
+},3000)
 
 }
 
@@ -166,47 +192,32 @@ const player=document.getElementById("player")
 player.src=data.music
 player.play()
 
-show(3)
-
-typeText(
-document.getElementById("t2"),
-"You are very special to me ❤️",
-70,
-()=>{
-document.getElementById("next2").style.display="inline-block"
-}
+romanticNote(
+"Thank you for playing the music ❤️",
+3
 )
 
+}
+
+function thankYou(){
+romanticNote(
+"You make this moment special ❤️",
+4
+)
 }
 
 function excited(){
-
-show(5)
-
-typeText(
-document.getElementById("note1"),
+romanticNote(
 "That makes me really happy ❤️",
-70,
-()=>{
-document.getElementById("next3").style.display="inline-block"
-}
+5
 )
-
 }
 
 function romantic(){
-
-show(7)
-
-typeText(
-document.getElementById("note2"),
+romanticNote(
 "You are the most special person in my life ❤️",
-70,
-()=>{
-document.getElementById("next4").style.display="inline-block"
-}
+6
 )
-
 }
 
 function angry(){
@@ -214,10 +225,11 @@ alert("Why not? 😠")
 }
 
 let index=0
+const effects=["fade","zoom","pulse","slide","blur"]
 
 function startSlide(){
 
-show(9)
+show(7)
 slide()
 
 }
@@ -226,36 +238,24 @@ function slide(){
 
 const img=document.getElementById("slide")
 
+img.className=""
+
 img.src=data.photos[index]
 
-img.classList.remove("show")
+const effect=effects[index % effects.length]
 
 setTimeout(()=>{
-img.classList.add("show")
+img.classList.add(effect)
 },100)
 
 index++
 
 if(index>=data.photos.length)return
 
-setTimeout(slide,3500)
+setTimeout(slide,2500)
 
 }
 
-document.getElementById("playBtn").style.display="inline-block"
-document.getElementById("notPlayBtn").style.display="inline-block"
-
-document.getElementById("excitedBtn").style.display="inline-block"
-document.getElementById("noBtn").style.display="inline-block"
-
-document.getElementById("yesBtn").style.display="inline-block"
-document.getElementById("noBtn2").style.display="inline-block"
-
-document.getElementById("lightBtn").style.display="inline-block"
-
-start()
-
 </script>
-
 </body>
 </html>
