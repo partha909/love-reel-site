@@ -12,24 +12,27 @@ body{
 margin:0;
 font-family:Arial;
 background:linear-gradient(135deg,#ff6a88,#ff99ac);
-display:flex;
-justify-content:center;
-align-items:center;
 min-height:100vh;
 overflow:hidden;
 }
 
+/* FULL SCREEN UI */
+
 .box{
 background:white;
-width:420px;
-max-width:95%;
-padding:30px;
-border-radius:15px;
+width:100%;
+height:100vh;
+padding:25px;
+border-radius:0;
 text-align:center;
-box-shadow:0 10px 30px rgba(0,0,0,0.2);
-position:relative;
-z-index:2;
+box-shadow:none;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
 }
+
+/* PAGE */
 
 .page{display:none}
 
@@ -53,40 +56,7 @@ opacity:1;
 transform:scale(1);
 }
 
-button:hover{
-transform:scale(1.08);
-}
-
-/* NOTE */
-
-.noteBox{
-background:white;
-padding:40px;
-border-radius:15px;
-box-shadow:0 10px 30px rgba(0,0,0,0.2);
-animation:noteSlide .8s ease;
-position:fixed;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-z-index:5;
-}
-
-@keyframes noteSlide{
-
-0%{
-transform:translate(-50%,-80%);
-opacity:0;
-}
-
-100%{
-transform:translate(-50%,-50%);
-opacity:1;
-}
-
-}
-
-/* CURSOR EFFECT */
+/* CURSOR */
 
 .cursor{
 display:inline-block;
@@ -98,6 +68,20 @@ animation:blink 1s infinite;
 0%{opacity:1}
 50%{opacity:0}
 100%{opacity:1}
+}
+
+/* NOTE */
+
+.noteBox{
+background:white;
+padding:40px;
+border-radius:15px;
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+z-index:5;
 }
 
 /* HEART */
@@ -187,14 +171,13 @@ const data=JSON.parse(localStorage.getItem(id))
 
 show(1)
 
-/* TEXT TYPING WITH CURSOR */
+/* WORD BY WORD TYPING */
 
-function typeText(el,text,speed=130,btn=null){
+function typeText(el,text,speed=120,buttons=[]){
 
 el.innerHTML=""
 
 const words=text.split(" ")
-
 let i=0
 
 const cursor=document.createElement("span")
@@ -221,9 +204,9 @@ setTimeout(reveal,speed)
 
 cursor.remove()
 
-if(btn){
+buttons.forEach(btn=>{
 btn.classList.add("show")
-}
+})
 
 }
 
@@ -238,61 +221,62 @@ reveal()
 typeText(
 document.getElementById("creatorText"),
 "Website Created By "+data.creator+" ❤️",
-130,
-document.getElementById("btn1")
+120,
+[document.getElementById("btn1")]
 )
 
 typeText(
 document.getElementById("playText"),
 "Play Music?",
-130,
-document.getElementById("playBtn")
+120,
+[
+document.getElementById("playBtn"),
+document.getElementById("notBtn")
+]
 )
-
-document.getElementById("notBtn").classList.add("show")
 
 typeText(
 document.getElementById("specialText"),
-"It's Your Special Day",
-130
+"It's Your Special Day"
 )
 
 typeText(
 document.getElementById("specialSub"),
 "Because you are special to me ❤️",
-130,
-document.getElementById("thankBtn")
+120,
+[document.getElementById("thankBtn")]
 )
 
 typeText(
 document.getElementById("makeText"),
-"I had to make something special",
-130
+"I had to make something special"
 )
 
 typeText(
 document.getElementById("makeSub"),
 "Because you are special to me ❤️",
-130,
-document.getElementById("excitedBtn")
+120,
+[
+document.getElementById("excitedBtn"),
+document.getElementById("noBtn")
+]
 )
-
-document.getElementById("noBtn").classList.add("show")
 
 typeText(
 document.getElementById("seeText"),
 "Do you want to see what I made?",
-130,
-document.getElementById("yesBtn")
+120,
+[
+document.getElementById("yesBtn"),
+document.getElementById("noBtn2")
+]
 )
-
-document.getElementById("noBtn2").classList.add("show")
 
 typeText(
 document.getElementById("lightText"),
 "Turn On Light 💡",
-130,
-document.getElementById("lightBtn")
+120,
+[document.getElementById("lightBtn")]
 )
 
 /* PAGE SWITCH */
