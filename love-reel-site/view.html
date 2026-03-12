@@ -5,19 +5,97 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Love Reel</title>
+<title>Love Story</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(135deg,#ff6a88,#ff99ac);
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+}
+
+.container{
+background:white;
+width:360px;
+padding:25px;
+border-radius:15px;
+text-align:center;
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+}
+
+.page{
+display:none;
+}
+
+button{
+padding:10px 20px;
+border:none;
+background:#ff4d6d;
+color:white;
+border-radius:20px;
+margin-top:10px;
+cursor:pointer;
+}
+
+img{
+width:100%;
+border-radius:10px;
+}
+
+</style>
 
 </head>
 
-<body style="text-align:center">
+<body>
 
-<h2 id="title"></h2>
+<div class="container">
 
-<button onclick="playMusic()">Play Music 🎵</button>
+<div class="page" id="page1">
 
-<div id="photos"></div>
+<h2 id="text1"></h2>
 
-<audio id="player"></audio>
+<button id="btn1" style="display:none" onclick="showPage(2)">
+Next ➡️
+</button>
+
+</div>
+
+<div class="page" id="page2">
+
+<h2>Play Music? 🎵</h2>
+
+<button onclick="playMusic()">YES ❤️</button>
+
+<button onclick="alert('😡 Why NO? Press YES!')">NO ❌</button>
+
+</div>
+
+<div class="page" id="page3">
+
+<h2 id="text2"></h2>
+
+<button id="btn2" style="display:none" onclick="showPage(4)">
+Next ➡️
+</button>
+
+</div>
+
+<div class="page" id="page4">
+
+<h2>Our Memories ❤️</h2>
+
+<img id="slide">
+
+</div>
+
+</div>
+
+<audio id="musicPlayer"></audio>
 
 <script>
 
@@ -27,31 +105,115 @@ const id=params.get("id")
 
 const data=JSON.parse(localStorage.getItem(id))
 
-document.getElementById("title").innerText=
-"Website Created By "+data.creator+" ❤️"
+function typeText(el,text,speed,callback){
+
+let i=0
+
+const timer=setInterval(()=>{
+
+el.innerHTML+=text.charAt(i)
+
+i++
+
+if(i>=text.length){
+
+clearInterval(timer)
+
+if(callback)callback()
+
+}
+
+},speed)
+
+}
+
+function showPage(n){
+
+document.querySelectorAll(".page").forEach(p=>p.style.display="none")
+
+document.getElementById("page"+n).style.display="block"
+
+}
+
+function start(){
+
+showPage(1)
+
+typeText(
+
+document.getElementById("text1"),
+
+"Website Created By "+data.creator+" ❤️",
+
+70,
+
+()=>{
+
+document.getElementById("btn1").style.display="block"
+
+}
+
+)
+
+}
 
 function playMusic(){
 
-const player=document.getElementById("player")
+const player=document.getElementById("musicPlayer")
 
 player.src=data.music
 
 player.play()
 
+showPage(3)
+
+typeText(
+
+document.getElementById("text2"),
+
+"It's Your Special Day 🎉 Because You Are Special ❤️",
+
+70,
+
+()=>{
+
+document.getElementById("btn2").style.display="block"
+
 }
 
-const box=document.getElementById("photos")
+)
 
-data.photos.forEach(p=>{
+}
 
-const img=document.createElement("img")
+let index=0
 
-img.src=p
-img.style.width="200px"
+function slideshow(){
 
-box.appendChild(img)
+const img=document.getElementById("slide")
+
+img.src=data.photos[index]
+
+index++
+
+if(index>=data.photos.length){
+
+index=0
+
+}
+
+setTimeout(slideshow,1500)
+
+}
+
+document.getElementById("btn2")?.addEventListener("click",()=>{
+
+showPage(4)
+
+slideshow()
 
 })
+
+start()
 
 </script>
 
