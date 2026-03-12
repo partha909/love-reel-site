@@ -6,11 +6,14 @@ const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 let musicURL=""
 let photoURLs=[]
 
-// Upload music
-document.getElementById("uploadMusic").onclick = async () => {
+// music upload
+document.getElementById("uploadMusic").addEventListener("click", async ()=>{
 
 const file=document.getElementById("musicFile").files[0]
-if(!file) return alert("Select music")
+if(!file){
+alert("Select music")
+return
+}
 
 const path="music/"+Date.now()+"_"+file.name
 
@@ -31,13 +34,18 @@ document.getElementById("musicBar").style.width="100%"
 
 checkReady()
 
-}
+})
 
-// Upload photos
-document.getElementById("uploadPhotos").onclick = async () => {
+// photos upload
+document.getElementById("uploadPhotos").addEventListener("click", async ()=>{
 
 const files=document.getElementById("photoFiles").files
-if(files.length===0) return alert("Select photos")
+if(files.length===0){
+alert("Select photos")
+return
+}
+
+let count=0
 
 for(const file of files){
 
@@ -53,13 +61,16 @@ const url=client.storage
 
 photoURLs.push(url)
 
-}
+count++
 
-document.getElementById("photoBar").style.width="100%"
+document.getElementById("photoBar").style.width =
+Math.round((count/files.length)*100)+"%"
+
+}
 
 checkReady()
 
-}
+})
 
 function checkReady(){
 if(musicURL && photoURLs.length>0){
@@ -67,11 +78,16 @@ document.getElementById("generateBtn").disabled=false
 }
 }
 
-// Generate link
-document.getElementById("generateBtn").onclick=()=>{
+// generate link
+document.getElementById("generateBtn").addEventListener("click", ()=>{
 
 const creator=document.getElementById("creator").value
 const lover=document.getElementById("lover").value
+
+if(!creator || !lover){
+alert("Enter names")
+return
+}
 
 const id=Date.now().toString(36)
 
@@ -88,4 +104,4 @@ document.getElementById("result").innerText=link
 
 navigator.clipboard.writeText(link)
 
-}
+})
