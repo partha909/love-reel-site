@@ -43,7 +43,7 @@ cursor:pointer;
 opacity:0;
 }
 
-/* BUTTON BOUNCE FROM FAR */
+/* BUTTON BOUNCE */
 
 .btnBounce{
 animation:bounceBtn 1.2s ease forwards;
@@ -71,8 +71,6 @@ opacity:1;
 
 }
 
-/* CURSOR */
-
 .cursor{
 display:inline-block;
 margin-left:3px;
@@ -84,8 +82,6 @@ animation:blink 1s infinite;
 50%{opacity:0}
 100%{opacity:1}
 }
-
-/* NOTE */
 
 .noteBox{
 background:linear-gradient(135deg,#ffd6e7,#ffb6c9);
@@ -141,6 +137,37 @@ animation:flowerFall 7s linear infinite;
 @keyframes flowerFall{
 0%{transform:translateY(0) rotate(0deg)}
 100%{transform:translateY(110vh) rotate(360deg)}
+}
+
+/* CREDIT SCREEN */
+
+.creditScreen{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:black;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+color:white;
+font-size:28px;
+text-align:center;
+opacity:0;
+animation:creditFade 2s forwards;
+z-index:50;
+}
+
+.creditScreen small{
+font-size:18px;
+margin-top:10px;
+}
+
+@keyframes creditFade{
+0%{opacity:0}
+100%{opacity:1}
 }
 
 </style>
@@ -201,8 +228,6 @@ const data=JSON.parse(localStorage.getItem(id))
 
 show(1)
 
-/* LETTER TYPING */
-
 function typeLetter(el,text,speed=80,buttons=[]){
 
 el.innerHTML=""
@@ -233,14 +258,10 @@ setTimeout(typing,speed)
 
 cursor.remove()
 
-/* WAIT 1 SECOND BEFORE BUTTON */
-
 setTimeout(()=>{
-
 buttons.forEach(btn=>{
 btn.classList.add("btnBounce")
 })
-
 },1000)
 
 }
@@ -250,8 +271,6 @@ btn.classList.add("btnBounce")
 typing()
 
 }
-
-/* TEXT */
 
 typeLetter(
 document.getElementById("creatorText"),
@@ -314,14 +333,10 @@ document.getElementById("lightText"),
 [document.getElementById("lightBtn")]
 )
 
-/* PAGE */
-
 function show(n){
 document.querySelectorAll(".page").forEach(p=>p.style.display="none")
 document.getElementById("p"+n).style.display="block"
 }
-
-/* NOTE */
 
 function showNote(text,next){
 
@@ -335,8 +350,6 @@ note.appendChild(h)
 document.body.appendChild(note)
 
 typeLetter(h,text,80)
-
-/* NOTE WAIT LONGER */
 
 setTimeout(()=>{
 note.remove()
@@ -369,8 +382,6 @@ function romantic(){
 showNote("You Are The Most Special Person In My Life ❤️",6)
 }
 
-/* NEGATIVE REPLIES */
-
 function angryPlay(){
 showNote("Oh no... please play the music once 😔",2)
 }
@@ -382,8 +393,6 @@ showNote("Really? I made this with so much love 💔",4)
 function angrySee(){
 showNote("Come on... you should see it at least once 😟",5)
 }
-
-/* PHOTO */
 
 let index=0
 
@@ -400,13 +409,36 @@ img.src=data.photos[index]
 
 index++
 
-if(index>=data.photos.length)return
+if(index>=data.photos.length){
+
+setTimeout(showCredits,2000)
+
+return
+}
 
 setTimeout(slide,2000)
 
 }
 
-/* HEART */
+/* CREDIT */
+
+function showCredits(){
+
+const credit=document.createElement("div")
+
+credit.className="creditScreen"
+
+credit.innerHTML=`
+<div>
+<b>Website Owned By Partha Saha</b>
+<br>
+<small>Contact On Telegram @Partha909</small>
+</div>
+`
+
+document.body.appendChild(credit)
+
+}
 
 function createHeart(){
 
@@ -422,8 +454,6 @@ setTimeout(()=>{heart.remove()},6000)
 }
 
 setInterval(createHeart,800)
-
-/* FLOWER */
 
 function createFlower(){
 
