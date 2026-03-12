@@ -3,15 +3,9 @@ document.getElementById("generateBtn").addEventListener("click", function(){
 const creator = document.getElementById("nameInput").value
 const lover = document.getElementById("loverInput").value
 
-const musicFile = document.getElementById("music").files[0]
-const photos = document.getElementById("photos").files
-
-if(!creator || !lover || !musicFile || photos.length === 0){
-
-alert("Please fill all fields ❤️")
-
+if(!creator || !lover){
+alert("Please enter names ❤️")
 return
-
 }
 
 const id = Date.now().toString(36)
@@ -26,6 +20,6 @@ document.getElementById("generatedLink").innerText = link
 
 navigator.clipboard.writeText(link)
 
-alert("Love link created & copied ❤️")
+alert("Love link copied ❤️")
 
 })
