@@ -1,33 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
 <title>Love Story</title>
 
 <style>
-
 body{
 font-family:Arial;
 background:#ff99ac;
 display:flex;
 justify-content:center;
 align-items:center;
-min-height:100vh;
+height:100vh;
 }
 
 .box{
 background:white;
-padding:25px;
-width:360px;
+padding:20px;
+width:350px;
 text-align:center;
-border-radius:12px;
+border-radius:10px;
 }
 
-.page{
-display:none;
+img{
+width:100%;
+margin-top:10px;
+border-radius:10px;
 }
 
 button{
@@ -37,46 +35,18 @@ color:white;
 border:none;
 border-radius:6px;
 }
-
-img{
-width:100%;
-margin-top:10px;
-border-radius:10px;
-}
-
 </style>
-
 </head>
 
 <body>
 
 <div class="box">
 
-<div id="page1" class="page">
+<h2 id="title"></h2>
 
-<h2 id="creatorText"></h2>
+<button onclick="playMusic()">Play Music 🎵</button>
 
-<button onclick="showPage(2)">Next</button>
-
-</div>
-
-<div id="page2" class="page">
-
-<h2>Play Music? 🎵</h2>
-
-<button onclick="playMusic()">YES ❤️</button>
-
-<button onclick="alert('😡 Press YES')">NO</button>
-
-</div>
-
-<div id="page3" class="page">
-
-<h2>Our Memories ❤️</h2>
-
-<img id="slide">
-
-</div>
+<div id="photos"></div>
 
 </div>
 
@@ -84,53 +54,27 @@ border-radius:10px;
 
 <script>
 
-const params=new URLSearchParams(window.location.search)
-
-const id=params.get("id")
-
+const id=new URLSearchParams(location.search).get("id")
 const data=JSON.parse(localStorage.getItem(id))
 
-document.getElementById("creatorText").innerText=
+document.getElementById("title").innerText=
 "Website Created By "+data.creator+" ❤️"
 
-showPage(1)
-
-function showPage(n){
-
-document.querySelectorAll(".page").forEach(p=>p.style.display="none")
-
-document.getElementById("page"+n).style.display="block"
-
-}
-
 function playMusic(){
-
 const player=document.getElementById("player")
-
 player.src=data.music
-
 player.play()
-
-showPage(3)
-
-startSlide()
-
+showPhotos()
 }
 
-let i=0
+function showPhotos(){
+const box=document.getElementById("photos")
 
-function startSlide(){
-
-const img=document.getElementById("slide")
-
-img.src=data.photos[i]
-
-i++
-
-if(i>=data.photos.length) i=0
-
-setTimeout(startSlide,1500)
-
+data.photos.forEach(url=>{
+const img=document.createElement("img")
+img.src=url
+box.appendChild(img)
+})
 }
 
 </script>
