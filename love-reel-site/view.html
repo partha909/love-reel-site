@@ -53,7 +53,26 @@ transition:.4s;
 
 button.show{
 opacity:1;
+animation:jumpDown .6s ease;
 transform:scale(1);
+}
+
+@keyframes jumpDown{
+
+0%{
+transform:translateY(-60px) scale(.8);
+opacity:0;
+}
+
+70%{
+transform:translateY(10px) scale(1.1);
+}
+
+100%{
+transform:translateY(0);
+opacity:1;
+}
+
 }
 
 /* CURSOR */
@@ -73,7 +92,7 @@ animation:blink 1s infinite;
 /* NOTE */
 
 .noteBox{
-background:#ffd6e7;
+background:linear-gradient(135deg,#ffd6e7,#ffb6c9);
 padding:40px;
 border-radius:20px;
 box-shadow:0 10px 30px rgba(0,0,0,0.2);
@@ -82,6 +101,13 @@ top:50%;
 left:50%;
 transform:translate(-50%,-50%);
 z-index:10;
+}
+
+/* IMAGE */
+
+img{
+width:80%;
+border-radius:12px;
 }
 
 /* HEART */
@@ -171,13 +197,12 @@ const data=JSON.parse(localStorage.getItem(id))
 
 show(1)
 
-/* VERY SLOW WORD TYPING */
+/* LETTER TYPING */
 
-function typeText(el,text,speed=350,buttons=[]){
+function typeLetter(el,text,speed=80,buttons=[]){
 
 el.innerHTML=""
 
-const words=text.split(" ")
 let i=0
 
 const cursor=document.createElement("span")
@@ -186,19 +211,19 @@ cursor.innerHTML="|"
 
 el.appendChild(cursor)
 
-function reveal(){
+function typing(){
 
-if(i<words.length){
+if(i<text.length){
 
 cursor.remove()
 
-el.innerHTML+=words[i]+" "
+el.innerHTML+=text.charAt(i)
 
 el.appendChild(cursor)
 
 i++
 
-setTimeout(reveal,speed)
+setTimeout(typing,speed)
 
 }else{
 
@@ -212,72 +237,70 @@ btn.classList.add("show")
 
 }
 
-reveal()
+typing()
 
 }
 
 /* TEXT */
 
-typeText(
+typeLetter(
 document.getElementById("creatorText"),
 "Welcome To My Website Created By "+data.creator+" ❤️",
-350,
+80,
 [document.getElementById("btn1")]
 )
 
-typeText(
+typeLetter(
 document.getElementById("playText"),
 "Play Music?",
-350,
+80,
 [
 document.getElementById("playBtn"),
 document.getElementById("notBtn")
 ]
 )
 
-typeText(
+typeLetter(
 document.getElementById("specialText"),
-"It's Your Special Day",
-350
+"It's Your Special Day"
 )
 
-typeText(
+typeLetter(
 document.getElementById("specialSub"),
 "Because You Are Special To Me ❤️",
-350,
+80,
 [document.getElementById("thankBtn")]
 )
 
-typeText(
+typeLetter(
 document.getElementById("makeText"),
-"I Had To Make Something Special",
-350
+"I Had To Make Something Special"
 )
 
-typeText(
+typeLetter(
 document.getElementById("makeSub"),
 "Because You Are Special To Me ❤️",
-350,
+80,
 [
 document.getElementById("excitedBtn"),
 document.getElementById("noBtn")
 ]
 )
 
-typeText(
+typeLetter(
 document.getElementById("seeText"),
 "Do You Want To See What I Made?",
-350,
+80,
 [
 document.getElementById("yesBtn"),
 document.getElementById("noBtn2")
 ]
 )
 
-typeText(
+typeLetter(
 document.getElementById("lightText"),
 "Turn On The Light",
-350,
+80,
 [document.getElementById("lightBtn")]
 )
 
@@ -288,7 +311,7 @@ document.querySelectorAll(".page").forEach(p=>p.style.display="none")
 document.getElementById("p"+n).style.display="block"
 }
 
-/* NOTE POPUP */
+/* NOTE */
 
 function showNote(text,next){
 
@@ -301,7 +324,7 @@ note.appendChild(h)
 
 document.body.appendChild(note)
 
-typeText(h,text,300)
+typeLetter(h,text,80)
 
 setTimeout(()=>{
 note.remove()
