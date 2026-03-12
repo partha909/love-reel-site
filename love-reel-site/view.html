@@ -39,6 +39,14 @@ color:white;
 border-radius:20px;
 margin-top:12px;
 cursor:pointer;
+opacity:0;
+transform:scale(.7);
+transition:.5s;
+}
+
+button.show{
+opacity:1;
+transform:scale(1);
 }
 
 img{
@@ -108,7 +116,7 @@ text-align:center;
 
 <div class="page" id="p1">
 <h2 id="creatorText"></h2>
-<button onclick="show(2)">Next</button>
+<button id="nextBtn" onclick="show(2)">Next</button>
 </div>
 
 <div class="page" id="p2">
@@ -161,15 +169,53 @@ const params=new URLSearchParams(window.location.search)
 const id=params.get("id")
 const data=JSON.parse(localStorage.getItem(id))
 
-document.getElementById("creatorText").innerText=
-"Website Created By "+data.creator+" ❤️"
+function typeText(el,text,speed,callback){
 
-show(1)
+let i=0
+el.innerHTML=""
+
+const timer=setInterval(()=>{
+
+el.innerHTML+=text.charAt(i)
+i++
+
+if(i>=text.length){
+
+clearInterval(timer)
+
+if(callback)callback()
+
+}
+
+},speed)
+
+}
 
 function show(n){
+
 document.querySelectorAll(".page").forEach(p=>p.style.display="none")
+
 document.getElementById("p"+n).style.display="block"
+
 }
+
+function showButton(btn){
+
+btn.classList.add("show")
+
+}
+
+document.getElementById("creatorText").innerText=""
+show(1)
+
+typeText(
+document.getElementById("creatorText"),
+"Website Created By "+data.creator+" ❤️",
+140,
+()=>{
+showButton(document.getElementById("nextBtn"))
+}
+)
 
 function romanticNote(text,nextPage){
 
@@ -200,28 +246,36 @@ romanticNote(
 }
 
 function thankYou(){
+
 romanticNote(
 "You make this moment special ❤️",
 4
 )
+
 }
 
 function excited(){
+
 romanticNote(
 "That makes me really happy ❤️",
 5
 )
+
 }
 
 function romantic(){
+
 romanticNote(
 "You are the most special person in my life ❤️",
 6
 )
+
 }
 
 function angry(){
+
 alert("Why not? 😠")
+
 }
 
 let index=0
@@ -257,5 +311,6 @@ setTimeout(slide,2500)
 }
 
 </script>
+
 </body>
 </html>
