@@ -73,22 +73,15 @@ animation:blink 1s infinite;
 /* NOTE */
 
 .noteBox{
-background:white;
+background:#ffd6e7;
 padding:40px;
-border-radius:15px;
+border-radius:20px;
 box-shadow:0 10px 30px rgba(0,0,0,0.2);
 position:fixed;
 top:50%;
 left:50%;
 transform:translate(-50%,-50%);
-z-index:5;
-}
-
-/* IMAGE */
-
-img{
-width:90%;
-border-radius:10px;
+z-index:10;
 }
 
 /* HEART */
@@ -147,8 +140,8 @@ animation:flowerFall 7s linear infinite;
 <div class="page" id="p4">
 <h3 id="makeText"></h3>
 <p id="makeSub"></p>
-<button id="excitedBtn" onclick="excited()">I am excited 😊</button>
-<button id="noBtn" onclick="angry()">Not excited</button>
+<button id="excitedBtn" onclick="excited()">I Am Excited</button>
+<button id="noBtn" onclick="angry()">Not Excited</button>
 </div>
 
 <div class="page" id="p5">
@@ -178,9 +171,9 @@ const data=JSON.parse(localStorage.getItem(id))
 
 show(1)
 
-/* WORD BY WORD TYPING */
+/* VERY SLOW WORD TYPING */
 
-function typeText(el,text,speed=120,buttons=[]){
+function typeText(el,text,speed=350,buttons=[]){
 
 el.innerHTML=""
 
@@ -227,15 +220,15 @@ reveal()
 
 typeText(
 document.getElementById("creatorText"),
-"Website Created By "+data.creator+" ❤️",
-120,
+"Welcome To My Website Created By "+data.creator+" ❤️",
+350,
 [document.getElementById("btn1")]
 )
 
 typeText(
 document.getElementById("playText"),
 "Play Music?",
-120,
+350,
 [
 document.getElementById("playBtn"),
 document.getElementById("notBtn")
@@ -244,25 +237,27 @@ document.getElementById("notBtn")
 
 typeText(
 document.getElementById("specialText"),
-"It's Your Special Day"
+"It's Your Special Day",
+350
 )
 
 typeText(
 document.getElementById("specialSub"),
-"Because you are special to me ❤️",
-120,
+"Because You Are Special To Me ❤️",
+350,
 [document.getElementById("thankBtn")]
 )
 
 typeText(
 document.getElementById("makeText"),
-"I had to make something special"
+"I Had To Make Something Special",
+350
 )
 
 typeText(
 document.getElementById("makeSub"),
-"Because you are special to me ❤️",
-120,
+"Because You Are Special To Me ❤️",
+350,
 [
 document.getElementById("excitedBtn"),
 document.getElementById("noBtn")
@@ -271,8 +266,8 @@ document.getElementById("noBtn")
 
 typeText(
 document.getElementById("seeText"),
-"Do you want to see what I made?",
-120,
+"Do You Want To See What I Made?",
+350,
 [
 document.getElementById("yesBtn"),
 document.getElementById("noBtn2")
@@ -281,8 +276,8 @@ document.getElementById("noBtn2")
 
 typeText(
 document.getElementById("lightText"),
-"Turn On Light 💡",
-120,
+"Turn On The Light",
+350,
 [document.getElementById("lightBtn")]
 )
 
@@ -293,7 +288,7 @@ document.querySelectorAll(".page").forEach(p=>p.style.display="none")
 document.getElementById("p"+n).style.display="block"
 }
 
-/* NOTE */
+/* NOTE POPUP */
 
 function showNote(text,next){
 
@@ -306,7 +301,7 @@ note.appendChild(h)
 
 document.body.appendChild(note)
 
-typeText(h,text,140)
+typeText(h,text,300)
 
 setTimeout(()=>{
 note.remove()
@@ -323,24 +318,24 @@ player.src=data.music
 
 player.play()
 
-showNote("Thank you for playing the music ❤️",3)
+showNote("Thank You For Playing This Music ❤️",3)
 
 }
 
 function thankYou(){
-showNote("You make this moment special ❤️",4)
+showNote("You Make This Moment Special ❤️",4)
 }
 
 function excited(){
-showNote("That makes me really happy ❤️",5)
+showNote("That Makes Me Really Happy ❤️",5)
 }
 
 function romantic(){
-showNote("You are the most special person in my life ❤️",6)
+showNote("You Are The Most Special Person In My Life ❤️",6)
 }
 
 function angry(){
-alert("Why not? 😠")
+alert("Why Not? 😠")
 }
 
 /* PHOTO */
