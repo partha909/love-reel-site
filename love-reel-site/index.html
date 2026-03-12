@@ -10,8 +10,9 @@
 <style>
 
 body{
+margin:0;
 font-family:Arial;
-background:#ff99ac;
+background:linear-gradient(135deg,#ff6a88,#ff99ac);
 display:flex;
 justify-content:center;
 align-items:center;
@@ -20,25 +21,37 @@ min-height:100vh;
 
 .container{
 background:white;
-padding:20px;
-border-radius:10px;
+width:380px;
+padding:25px;
+border-radius:15px;
 text-align:center;
-width:350px;
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
 }
 
 input{
 width:90%;
 padding:10px;
 margin:6px;
+border-radius:8px;
+border:1px solid #ccc;
 }
 
 button{
 padding:10px 20px;
-background:#ff4d6d;
+margin-top:8px;
 border:none;
+border-radius:20px;
+background:#ff4d6d;
 color:white;
-border-radius:8px;
 cursor:pointer;
+}
+
+.preview img{
+width:70px;
+height:70px;
+margin:5px;
+border-radius:8px;
+object-fit:cover;
 }
 
 </style>
@@ -49,35 +62,31 @@ cursor:pointer;
 
 <div class="container">
 
-<h2>Create Love Link ❤️</h2>
+<h2>Create Love Reel ❤️</h2>
 
-<input id="creator" placeholder="Your Name">
+<input id="creatorName" placeholder="Your Name">
 
-<input id="lover" placeholder="Lover Name">
+<input id="loverName" placeholder="Lover Name">
 
 <br>
 
 Music
 
-<input type="file" id="music">
+<input type="file" id="musicFile" accept="audio/*">
 
-<button onclick="uploadMusic()">Upload Music</button>
-
-<br><br>
+<br>
 
 Photos
 
-<input type="file" id="photos" multiple>
+<input type="file" id="photoFiles" multiple accept="image/*">
 
-<button onclick="uploadPhotos()">Upload Photos</button>
+<div class="preview" id="preview"></div>
 
-<br><br>
+<br>
 
-<button id="generateBtn" style="display:none" onclick="generateLink()">
-Generate Love Link ❤️
-</button>
+<button onclick="generateLink()">Generate Love Link ❤️</button>
 
-<p id="result"></p>
+<p id="linkBox"></p>
 
 </div>
 
