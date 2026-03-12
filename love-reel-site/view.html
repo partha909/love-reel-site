@@ -29,18 +29,17 @@ text-align:center;
 
 img{
 width:100%;
-border-radius:10px;
 margin-top:10px;
+border-radius:10px;
 }
 
 button{
-padding:12px 25px;
+padding:10px 20px;
 margin-top:10px;
 border:none;
-border-radius:25px;
+border-radius:20px;
 background:#ff4d6d;
 color:white;
-cursor:pointer;
 }
 
 </style>
@@ -53,7 +52,7 @@ cursor:pointer;
 
 <h2 id="title"></h2>
 
-<button id="playBtn">Play Music 🎵</button>
+<button id="playMusic">Play Music 🎵</button>
 
 <div id="photos"></div>
 
@@ -64,6 +63,7 @@ cursor:pointer;
 <script>
 
 const params=new URLSearchParams(window.location.search)
+
 const id=params.get("id")
 
 const data=JSON.parse(localStorage.getItem(id))
@@ -71,7 +71,7 @@ const data=JSON.parse(localStorage.getItem(id))
 document.getElementById("title").innerText=
 "Website Created By "+data.creator+" ❤️"
 
-document.getElementById("playBtn").onclick=()=>{
+document.getElementById("playMusic").onclick=()=>{
 
 const player=document.getElementById("musicPlayer")
 
@@ -81,15 +81,15 @@ player.play()
 
 }
 
-const photoBox=document.getElementById("photos")
+const box=document.getElementById("photos")
 
-data.photos.forEach(url=>{
+data.photos.forEach(p=>{
 
 const img=document.createElement("img")
 
-img.src=url
+img.src=p
 
-photoBox.appendChild(img)
+box.appendChild(img)
 
 })
 
