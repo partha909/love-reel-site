@@ -31,7 +31,9 @@ position:relative;
 z-index:2;
 }
 
-.page{display:none;}
+.page{display:none}
+
+/* BUTTON */
 
 button{
 padding:10px 18px;
@@ -41,65 +43,64 @@ color:white;
 border-radius:20px;
 margin-top:12px;
 cursor:pointer;
-transition:.3s;
+opacity:0;
+transform:scale(.8);
+transition:.4s;
+}
+
+button.show{
+opacity:1;
+transform:scale(1);
 }
 
 button:hover{
 transform:scale(1.08);
 }
 
-img{
-width:100%;
-border-radius:10px;
-opacity:0;
-}
-
-/* NOTE SLIDE */
+/* NOTE */
 
 .noteBox{
 background:white;
 padding:40px;
 border-radius:15px;
 box-shadow:0 10px 30px rgba(0,0,0,0.2);
-animation:noteSlide .9s ease;
+animation:noteSlide .8s ease;
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+z-index:5;
 }
 
 @keyframes noteSlide{
 
 0%{
-transform:translateY(-120px);
+transform:translate(-50%,-80%);
 opacity:0;
 }
 
 100%{
-transform:translateY(0);
+transform:translate(-50%,-50%);
 opacity:1;
 }
 
 }
 
-/* MEMORIES TEXT */
+/* CURSOR EFFECT */
 
-.memories{
-position:absolute;
-top:30px;
-left:50%;
-transform:translateX(-50%);
-color:white;
-text-align:center;
-font-weight:bold;
-text-shadow:0 0 10px rgba(255,255,255,.7);
-animation:glow 3s infinite alternate;
+.cursor{
+display:inline-block;
+margin-left:3px;
+animation:blink 1s infinite;
 }
 
-@keyframes glow{
-
-0%{opacity:.6}
+@keyframes blink{
+0%{opacity:1}
+50%{opacity:0}
 100%{opacity:1}
-
 }
 
-/* HEARTS */
+/* HEART */
 
 .heart{
 position:fixed;
@@ -110,20 +111,11 @@ animation:heartFloat 6s linear infinite;
 }
 
 @keyframes heartFloat{
-
-0%{
-transform:translateY(0);
-opacity:1;
+0%{transform:translateY(0);opacity:1;}
+100%{transform:translateY(-110vh);opacity:0;}
 }
 
-100%{
-transform:translateY(-110vh);
-opacity:0;
-}
-
-}
-
-/* FLOWER RAIN */
+/* FLOWER */
 
 .flower{
 position:fixed;
@@ -133,10 +125,8 @@ animation:flowerFall 7s linear infinite;
 }
 
 @keyframes flowerFall{
-
 0%{transform:translateY(0) rotate(0deg)}
 100%{transform:translateY(110vh) rotate(360deg)}
-
 }
 
 </style>
@@ -148,48 +138,41 @@ animation:flowerFall 7s linear infinite;
 
 <div class="page" id="p1">
 <h2 id="creatorText"></h2>
-<button onclick="show(2)">Next</button>
+<button id="btn1" onclick="show(2)">Next</button>
 </div>
 
 <div class="page" id="p2">
 <h3 id="playText"></h3>
-<button onclick="playMusic()">Play</button>
-<button onclick="angry()">Not Play</button>
+<button id="playBtn" onclick="playMusic()">Play</button>
+<button id="notBtn" onclick="angry()">Not Play</button>
 </div>
 
 <div class="page" id="p3">
 <h3 id="specialText"></h3>
 <p id="specialSub"></p>
-<button onclick="thankYou()">Thank You ❤️</button>
+<button id="thankBtn" onclick="thankYou()">Thank You ❤️</button>
 </div>
 
 <div class="page" id="p4">
 <h3 id="makeText"></h3>
 <p id="makeSub"></p>
-<button onclick="excited()">I am excited 😊</button>
-<button onclick="angry()">Not excited</button>
+<button id="excitedBtn" onclick="excited()">I am excited 😊</button>
+<button id="noBtn" onclick="angry()">Not excited</button>
 </div>
 
 <div class="page" id="p5">
 <h3 id="seeText"></h3>
-<button onclick="romantic()">Yes</button>
-<button onclick="angry()">No</button>
+<button id="yesBtn" onclick="romantic()">Yes</button>
+<button id="noBtn2" onclick="angry()">No</button>
 </div>
 
 <div class="page" id="p6">
 <h3 id="lightText"></h3>
-<button onclick="startSlide()">Light On</button>
+<button id="lightBtn" onclick="startSlide()">Light On</button>
 </div>
 
 <div class="page" id="p7">
-
-<div class="memories">
-<h3>Our Memories ❤️</h3>
-<p>Every moment with you is special</p>
-</div>
-
 <img id="slide">
-
 </div>
 
 </div>
@@ -204,23 +187,43 @@ const data=JSON.parse(localStorage.getItem(id))
 
 show(1)
 
-/* WORD BY WORD REVEAL */
+/* TEXT TYPING WITH CURSOR */
 
-function typeText(el,text,speed=130){
+function typeText(el,text,speed=130,btn=null){
 
 el.innerHTML=""
+
 const words=text.split(" ")
 
 let i=0
+
+const cursor=document.createElement("span")
+cursor.className="cursor"
+cursor.innerHTML="|"
+
+el.appendChild(cursor)
 
 function reveal(){
 
 if(i<words.length){
 
+cursor.remove()
+
 el.innerHTML+=words[i]+" "
+
+el.appendChild(cursor)
+
 i++
 
 setTimeout(reveal,speed)
+
+}else{
+
+cursor.remove()
+
+if(btn){
+btn.classList.add("show")
+}
 
 }
 
@@ -230,99 +233,127 @@ reveal()
 
 }
 
-/* PAGE TEXT */
+/* TEXT */
 
-typeText(document.getElementById("creatorText"),"Website Created By "+data.creator+" ❤️")
-typeText(document.getElementById("playText"),"Play Music?")
-typeText(document.getElementById("specialText"),"It's Your Special Day")
-typeText(document.getElementById("specialSub"),"Because you are special to me ❤️")
-typeText(document.getElementById("makeText"),"I had to make something special")
-typeText(document.getElementById("makeSub"),"Because you are special to me ❤️")
-typeText(document.getElementById("seeText"),"Do you want to see what I made?")
-typeText(document.getElementById("lightText"),"Turn On Light 💡")
+typeText(
+document.getElementById("creatorText"),
+"Website Created By "+data.creator+" ❤️",
+130,
+document.getElementById("btn1")
+)
+
+typeText(
+document.getElementById("playText"),
+"Play Music?",
+130,
+document.getElementById("playBtn")
+)
+
+document.getElementById("notBtn").classList.add("show")
+
+typeText(
+document.getElementById("specialText"),
+"It's Your Special Day",
+130
+)
+
+typeText(
+document.getElementById("specialSub"),
+"Because you are special to me ❤️",
+130,
+document.getElementById("thankBtn")
+)
+
+typeText(
+document.getElementById("makeText"),
+"I had to make something special",
+130
+)
+
+typeText(
+document.getElementById("makeSub"),
+"Because you are special to me ❤️",
+130,
+document.getElementById("excitedBtn")
+)
+
+document.getElementById("noBtn").classList.add("show")
+
+typeText(
+document.getElementById("seeText"),
+"Do you want to see what I made?",
+130,
+document.getElementById("yesBtn")
+)
+
+document.getElementById("noBtn2").classList.add("show")
+
+typeText(
+document.getElementById("lightText"),
+"Turn On Light 💡",
+130,
+document.getElementById("lightBtn")
+)
+
+/* PAGE SWITCH */
 
 function show(n){
-
 document.querySelectorAll(".page").forEach(p=>p.style.display="none")
 document.getElementById("p"+n).style.display="block"
-
 }
 
 /* NOTE */
 
-function note(text,nextPage){
+function showNote(text,next){
 
-showNote(text)
+const note=document.createElement("div")
+note.className="noteBox"
 
-setTimeout(()=>{
-show(nextPage)
-},3000)
+const h=document.createElement("h3")
 
-}
+note.appendChild(h)
 
-function showNote(text){
+document.body.appendChild(note)
 
-document.querySelectorAll(".page").forEach(p=>p.style.display="none")
-
-const div=document.createElement("div")
-div.className="noteBox"
-
-const noteText=document.createElement("h3")
-
-div.appendChild(noteText)
-document.body.appendChild(div)
-
-typeText(noteText,text,140)
+typeText(h,text,140)
 
 setTimeout(()=>{
-div.remove()
+note.remove()
+show(next)
 },3000)
 
 }
 
 function playMusic(){
-
 const player=document.getElementById("player")
 player.src=data.music
 player.play()
-
-note("Thank you for playing the music ❤️",3)
-
+showNote("Thank you for playing the music ❤️",3)
 }
 
 function thankYou(){
-
-note("You make this moment special ❤️",4)
-
+showNote("You make this moment special ❤️",4)
 }
 
 function excited(){
-
-note("That makes me really happy ❤️",5)
-
+showNote("That makes me really happy ❤️",5)
 }
 
 function romantic(){
-
-note("You are the most special person in my life ❤️",6)
-
+showNote("You are the most special person in my life ❤️",6)
 }
 
 function angry(){
-
 alert("Why not? 😠")
-
 }
 
-/* PHOTO SLIDE */
+/* PHOTO */
 
 let index=0
 
 function startSlide(){
-
 show(7)
 slide()
-
 }
 
 function slide(){
@@ -330,12 +361,7 @@ function slide(){
 const img=document.getElementById("slide")
 
 img.src=data.photos[index]
-
-img.style.opacity=0
-
-setTimeout(()=>{
 img.style.opacity=1
-},100)
 
 index++
 
@@ -345,41 +371,35 @@ setTimeout(slide,2000)
 
 }
 
-/* HEARTS */
+/* HEART */
 
 function createHeart(){
 
 const heart=document.createElement("div")
 heart.className="heart"
 heart.innerHTML="❤️"
-
 heart.style.left=Math.random()*100+"vw"
 
 document.body.appendChild(heart)
 
-setTimeout(()=>{
-heart.remove()
-},6000)
+setTimeout(()=>{heart.remove()},6000)
 
 }
 
 setInterval(createHeart,800)
 
-/* FLOWERS */
+/* FLOWER */
 
 function createFlower(){
 
 const flower=document.createElement("div")
 flower.className="flower"
 flower.innerHTML="🌸"
-
 flower.style.left=Math.random()*100+"vw"
 
 document.body.appendChild(flower)
 
-setTimeout(()=>{
-flower.remove()
-},7000)
+setTimeout(()=>{flower.remove()},7000)
 
 }
 
