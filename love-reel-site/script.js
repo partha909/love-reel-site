@@ -1,35 +1,29 @@
 const SUPABASE_URL = "https://wakqdyivbsayqcgptvwt.supabase.co"
 const SUPABASE_KEY = "sb_publishable_hmfrQQc8drLkV2hlN9c3pA_Vp9vC68h"
 
-const supabase = supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
-)
+const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 
 let musicURL=""
 let photoURLs=[]
 
-async function uploadMusic(){
+// Upload music
+document.getElementById("uploadMusic").onclick = async () => {
 
 const file=document.getElementById("musicFile").files[0]
-
-if(!file){
-alert("Select music first")
-return
-}
+if(!file) return alert("Select music")
 
 const path="music/"+Date.now()+"_"+file.name
 
-const {data,error}=await supabase.storage
+const {error}=await client.storage
 .from("love-reels")
 .upload(path,file)
 
 if(error){
-alert("Upload error")
+alert(error.message)
 return
 }
 
-musicURL=supabase.storage
+musicURL=client.storage
 .from("love-reels")
 .getPublicUrl(path).data.publicUrl
 
@@ -39,19 +33,21 @@ checkReady()
 
 }
 
-async function uploadPhotos(){
+// Upload photos
+document.getElementById("uploadPhotos").onclick = async () => {
 
 const files=document.getElementById("photoFiles").files
+if(files.length===0) return alert("Select photos")
 
-for(let file of files){
+for(const file of files){
 
 const path="photos/"+Date.now()+"_"+file.name
 
-await supabase.storage
+await client.storage
 .from("love-reels")
 .upload(path,file)
 
-const url=supabase.storage
+const url=client.storage
 .from("love-reels")
 .getPublicUrl(path).data.publicUrl
 
@@ -66,35 +62,29 @@ checkReady()
 }
 
 function checkReady(){
-
 if(musicURL && photoURLs.length>0){
-
-document.getElementById("generateBtn").style.display="block"
-
+document.getElementById("generateBtn").disabled=false
+}
 }
 
-}
-
-function generateLink(){
+// Generate link
+document.getElementById("generateBtn").onclick=()=>{
 
 const creator=document.getElementById("creator").value
-
 const lover=document.getElementById("lover").value
 
 const id=Date.now().toString(36)
 
 localStorage.setItem(id,JSON.stringify({
-
 creator,
 lover,
 music:musicURL,
 photos:photoURLs
-
 }))
 
 const link=window.location.origin+"/view.html?id="+id
 
-document.getElementById("link").innerText=link
+document.getElementById("result").innerText=link
 
 navigator.clipboard.writeText(link)
 
