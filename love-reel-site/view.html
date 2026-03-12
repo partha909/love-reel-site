@@ -1,32 +1,108 @@
-const supabaseUrl = "https://wakqdyivbsayqcgptvwt.supabase.co"
-const supabaseKey = "sb_publishable_hmfrQQc8drLkV2hlN9c3pA_Vp9vC68h"
+<!DOCTYPE html>
+<html>
+<head>
 
-const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey)
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Love Reel</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(135deg,#ff6a88,#ff99ac);
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+}
+
+.container{
+background:white;
+width:360px;
+padding:25px;
+border-radius:15px;
+text-align:center;
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+}
+
+h2{
+color:#ff4d6d;
+}
+
+.storyPage{
+display:none;
+}
+
+button{
+padding:12px 25px;
+margin-top:15px;
+border:none;
+border-radius:25px;
+background:#ff4d6d;
+color:white;
+font-size:16px;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container storyPage" id="page1">
+
+<h2 id="creatorText"></h2>
+
+<button onclick="showPage(2)">Next ➡️</button>
+
+</div>
+
+
+<div class="container storyPage" id="page2">
+
+<h2>Play Music? 🎵</h2>
+
+<button onclick="playMusic()">YES ❤️</button>
+
+<button onclick="alert('Try Again 😅 Please press YES!')">NO ❌</button>
+
+</div>
+
+<audio id="song"></audio>
+
+<script>
 
 const params = new URLSearchParams(window.location.search)
-const id = params.get("id")
 
-async function loadReel(){
+const creator = params.get("creator")
+const lover = params.get("lover")
 
-const { data } = await supabaseClient
-.from("reels")
-.select("*")
-.eq("id", id)
-.single()
+document.getElementById("page1").style.display="block"
 
 document.getElementById("creatorText").innerText =
-"Website Created By " + data.creator + " ❤️"
+"Website Created By " + creator + " ❤️"
 
-const { data:musicUrl } =
-supabaseClient.storage
-.from("love-files")
-.getPublicUrl(data.music)
+function showPage(n){
 
-document.getElementById("song").src =
-musicUrl.publicUrl
+document.querySelectorAll(".storyPage").forEach(p=>p.style.display="none")
 
-photos = data.photos
+let page=document.getElementById("page"+n)
+
+if(page) page.style.display="block"
 
 }
 
-loadReel()
+function playMusic(){
+
+alert("Music will play here 🎵")
+
+}
+
+</script>
+
+</body>
+</html>
