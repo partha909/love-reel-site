@@ -38,45 +38,20 @@ color:white;
 border-radius:20px;
 margin-top:12px;
 cursor:pointer;
-opacity:0;
-transition:0.6s;
+display:none;
 }
 
-button.show{
-opacity:1;
-}
-
-#slide{
+img{
 width:100%;
 border-radius:10px;
 opacity:0;
-transform:scale(0.85);
-transition:1.5s;
+transform:scale(0.9);
+transition:1.2s;
 }
 
-#slide.show{
+img.show{
 opacity:1;
 transform:scale(1);
-}
-
-.popup{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.6);
-display:none;
-justify-content:center;
-align-items:center;
-}
-
-.popupBox{
-background:white;
-padding:20px;
-border-radius:10px;
-width:260px;
-text-align:center;
 }
 
 </style>
@@ -89,58 +64,51 @@ text-align:center;
 
 <div class="page" id="p1">
 <h2 id="t1"></h2>
-<button id="b1" onclick="show(2)">Next</button>
+<button id="next1" onclick="show(2)">Next</button>
 </div>
 
 <div class="page" id="p2">
 <h3>Play Music? 🎵</h3>
-<button onclick="playMusic()">Play</button>
-<button onclick="angry()">Not Play</button>
+<button id="playBtn" onclick="playMusic()">Play</button>
+<button id="notPlayBtn" onclick="angry()">Not Play</button>
 </div>
 
 <div class="page" id="p3">
 <h3 id="t2"></h3>
-<button id="b2" onclick="show(4)">Next</button>
+<button id="next2" onclick="show(4)">Next</button>
 </div>
 
 <div class="page" id="p4">
 <h3 id="t3"></h3>
-<button onclick="excited()">I'm Excited 😊</button>
-<button onclick="angry()">I Don't Want</button>
+<button id="excitedBtn" onclick="excited()">I'm Excited 😊</button>
+<button id="noBtn" onclick="angry()">I Don't Want</button>
 </div>
 
 <div class="page" id="p5">
 <p id="note1"></p>
-<button id="b3" onclick="show(6)">Next</button>
+<button id="next3" onclick="show(6)">Next</button>
 </div>
 
 <div class="page" id="p6">
-<h3>Do you want to see what I made?</h3>
-<button onclick="romantic()">Yes</button>
-<button onclick="angry()">No</button>
+<h3 id="t4"></h3>
+<button id="yesBtn" onclick="romantic()">Yes</button>
+<button id="noBtn2" onclick="angry()">No</button>
 </div>
 
 <div class="page" id="p7">
 <p id="note2"></p>
-<button id="b4" onclick="show(8)">Next</button>
+<button id="next4" onclick="show(8)">Next</button>
 </div>
 
 <div class="page" id="p8">
 <h3>Turn On The Light 💡</h3>
-<button onclick="startSlide()">Light On</button>
+<button id="lightBtn" onclick="startSlide()">Light On</button>
 </div>
 
 <div class="page" id="p9">
 <img id="slide">
 </div>
 
-</div>
-
-<div class="popup" id="popup">
-<div class="popupBox">
-<p id="popupText"></p>
-<button onclick="closePopup()">OK</button>
-</div>
 </div>
 
 <audio id="player"></audio>
@@ -163,7 +131,7 @@ i++
 
 if(i>=text.length){
 clearInterval(timer)
-if(callback)callback()
+callback()
 }
 
 },speed)
@@ -171,8 +139,10 @@ if(callback)callback()
 }
 
 function show(n){
+
 document.querySelectorAll(".page").forEach(p=>p.style.display="none")
 document.getElementById("p"+n).style.display="block"
+
 }
 
 function start(){
@@ -182,9 +152,9 @@ show(1)
 typeText(
 document.getElementById("t1"),
 "Website Created By "+data.creator+" ❤️",
-80,
+70,
 ()=>{
-document.getElementById("b1").classList.add("show")
+document.getElementById("next1").style.display="inline-block"
 }
 )
 
@@ -196,65 +166,60 @@ const player=document.getElementById("player")
 player.src=data.music
 player.play()
 
+show(3)
+
 typeText(
 document.getElementById("t2"),
 "You are very special to me ❤️",
-80,
+70,
 ()=>{
-document.getElementById("b2").classList.add("show")
+document.getElementById("next2").style.display="inline-block"
 }
 )
-
-show(3)
 
 }
 
 function excited(){
 
+show(5)
+
 typeText(
 document.getElementById("note1"),
 "That makes me really happy ❤️",
-80,
+70,
 ()=>{
-document.getElementById("b3").classList.add("show")
+document.getElementById("next3").style.display="inline-block"
 }
 )
-
-show(5)
 
 }
 
 function romantic(){
 
+show(7)
+
 typeText(
 document.getElementById("note2"),
 "You are the most special person in my life ❤️",
-80,
+70,
 ()=>{
-document.getElementById("b4").classList.add("show")
+document.getElementById("next4").style.display="inline-block"
 }
 )
-
-show(7)
 
 }
 
 function angry(){
-
-document.getElementById("popupText").innerText="Why not? 😠"
-document.getElementById("popup").style.display="flex"
-
-}
-
-function closePopup(){
-document.getElementById("popup").style.display="none"
+alert("Why not? 😠")
 }
 
 let index=0
 
 function startSlide(){
+
 show(9)
 slide()
+
 }
 
 function slide(){
@@ -277,8 +242,20 @@ setTimeout(slide,3500)
 
 }
 
+document.getElementById("playBtn").style.display="inline-block"
+document.getElementById("notPlayBtn").style.display="inline-block"
+
+document.getElementById("excitedBtn").style.display="inline-block"
+document.getElementById("noBtn").style.display="inline-block"
+
+document.getElementById("yesBtn").style.display="inline-block"
+document.getElementById("noBtn2").style.display="inline-block"
+
+document.getElementById("lightBtn").style.display="inline-block"
+
 start()
 
 </script>
+
 </body>
 </html>
