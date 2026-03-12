@@ -25,25 +25,21 @@ width:360px;
 padding:25px;
 border-radius:15px;
 text-align:center;
-box-shadow:0 10px 30px rgba(0,0,0,0.2);
 }
 
-h2{
-color:#ff4d6d;
-}
-
-.storyPage{
-display:none;
+img{
+width:100%;
+border-radius:10px;
+margin-top:10px;
 }
 
 button{
 padding:12px 25px;
-margin-top:15px;
+margin-top:10px;
 border:none;
 border-radius:25px;
 background:#ff4d6d;
 color:white;
-font-size:16px;
 cursor:pointer;
 }
 
@@ -53,54 +49,49 @@ cursor:pointer;
 
 <body>
 
-<div class="container storyPage" id="page1">
+<div class="container">
 
-<h2 id="creatorText"></h2>
+<h2 id="title"></h2>
 
-<button onclick="showPage(2)">Next ➡️</button>
+<button id="playBtn">Play Music 🎵</button>
 
-</div>
-
-
-<div class="container storyPage" id="page2">
-
-<h2>Play Music? 🎵</h2>
-
-<button onclick="playMusic()">YES ❤️</button>
-
-<button onclick="alert('Try Again 😅 Please press YES!')">NO ❌</button>
+<div id="photos"></div>
 
 </div>
 
-<audio id="song"></audio>
+<audio id="musicPlayer"></audio>
 
 <script>
 
-const params = new URLSearchParams(window.location.search)
+const params=new URLSearchParams(window.location.search)
+const id=params.get("id")
 
-const creator = params.get("creator")
-const lover = params.get("lover")
+const data=JSON.parse(localStorage.getItem(id))
 
-document.getElementById("page1").style.display="block"
+document.getElementById("title").innerText=
+"Website Created By "+data.creator+" ❤️"
 
-document.getElementById("creatorText").innerText =
-"Website Created By " + creator + " ❤️"
+document.getElementById("playBtn").onclick=()=>{
 
-function showPage(n){
+const player=document.getElementById("musicPlayer")
 
-document.querySelectorAll(".storyPage").forEach(p=>p.style.display="none")
+player.src=data.music
 
-let page=document.getElementById("page"+n)
-
-if(page) page.style.display="block"
+player.play()
 
 }
 
-function playMusic(){
+const photoBox=document.getElementById("photos")
 
-alert("Music will play here 🎵")
+data.photos.forEach(url=>{
 
-}
+const img=document.createElement("img")
+
+img.src=url
+
+photoBox.appendChild(img)
+
+})
 
 </script>
 
