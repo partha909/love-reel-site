@@ -1,28 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta charset="UTF-8">
-<title>Create Love Reel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Love Reel Creator</title>
 
 <style>
 
 body{
+margin:0;
 font-family:Arial;
-background:linear-gradient(135deg,#ff4d6d,#ff758f);
-height:100vh;
+background:linear-gradient(135deg,#ff6a88,#ff99ac);
 display:flex;
 justify-content:center;
 align-items:center;
-margin:0;
+min-height:100vh;
 }
 
-.card{
+.container{
 background:white;
-padding:30px;
-width:350px;
+width:360px;
+padding:25px;
 border-radius:15px;
-box-shadow:0 10px 30px rgba(0,0,0,0.2);
 text-align:center;
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
 }
 
 h2{
@@ -30,28 +33,29 @@ color:#ff4d6d;
 }
 
 input{
-width:100%;
+width:90%;
 padding:10px;
-margin:8px 0;
+margin:8px;
 border-radius:8px;
 border:1px solid #ccc;
 }
 
 button{
-background:#ff4d6d;
-color:white;
-padding:12px;
+padding:12px 25px;
+margin-top:15px;
 border:none;
 border-radius:25px;
-width:100%;
+background:#ff4d6d;
+color:white;
 font-size:16px;
 cursor:pointer;
 }
 
-#linkBox{
+#generatedLink{
 margin-top:15px;
 word-break:break-all;
-color:green;
+color:#ff4d6d;
+font-weight:bold;
 }
 
 </style>
@@ -60,97 +64,33 @@ color:green;
 
 <body>
 
-<div class="card">
+<div class="container">
 
 <h2>Create Love Reel ❤️</h2>
 
-<input id="creator" placeholder="Your Name">
+<input id="nameInput" placeholder="Your Name">
 
-<input id="lover" placeholder="Lover Name">
+<input id="loverInput" placeholder="Lover Name">
 
-<label>Upload Photos (1-20)</label>
-<input type="file" id="photos" multiple>
+<br>
 
-<label>Upload Music</label>
-<input type="file" id="music">
+<input type="file" id="music" accept="audio/*">
 
-<button onclick="createReel()">Generate Love Link</button>
+<br>
 
-<div id="linkBox"></div>
+<input type="file" id="photos" multiple accept="image/*">
+
+<br>
+
+<button type="button" id="generateBtn">
+Generate Love Link ❤️
+</button>
+
+<p id="generatedLink"></p>
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-
-<script>
-
-const supabase = supabase.createClient(
-"https://wakqdyivbsayqcgptvwt.supabase.co",
-"sb_publishable_hmfrQQc8drLkV2hlN9c3pA_Vp9vC68h"
-)
-
-async function createReel(){
-
-let creator=document.getElementById("creator").value
-let lover=document.getElementById("lover").value
-
-let photoFiles=document.getElementById("photos").files
-let musicFile=document.getElementById("music").files[0]
-
-if(!creator||!lover||photoFiles.length==0||!musicFile){
-alert("Fill all fields")
-return
-}
-
-let photoUrls=[]
-
-for(let file of photoFiles){
-
-let fileName=Date.now()+"_"+file.name
-
-await supabase.storage
-.from("love-reels")
-.upload(fileName,file)
-
-let {data}=supabase.storage
-.from("love-reels")
-.getPublicUrl(fileName)
-
-photoUrls.push(data.publicUrl)
-
-}
-
-let musicName=Date.now()+"_"+musicFile.name
-
-await supabase.storage
-.from("love-reels")
-.upload(musicName,musicFile)
-
-let {data:musicData}=supabase.storage
-.from("love-reels")
-.getPublicUrl(musicName)
-
-let musicUrl=musicData.publicUrl
-
-let {data,error}=await supabase
-.from("reels")
-.insert({
-creator_name:creator,
-lover_name:lover,
-music_url:musicUrl,
-photos:photoUrls
-})
-.select()
-
-let id=data[0].id
-
-let link=window.location.origin+"/view.html?id="+id
-
-document.getElementById("linkBox").innerHTML="Love Link:<br>"+link
-
-}
-
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>
