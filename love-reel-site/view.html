@@ -1,52 +1,123 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>Love Story</title>
 
 <style>
+
 body{
+margin:0;
 font-family:Arial;
-background:#ff99ac;
+background:linear-gradient(135deg,#ff6a88,#ff99ac);
 display:flex;
 justify-content:center;
 align-items:center;
-height:100vh;
+min-height:100vh;
 }
 
-.box{
+.container{
 background:white;
-padding:20px;
-width:350px;
-border-radius:10px;
+width:360px;
+padding:25px;
+border-radius:15px;
 text-align:center;
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+}
+
+.page{
+display:none;
+}
+
+button{
+padding:10px 20px;
+border:none;
+background:#ff4d6d;
+color:white;
+border-radius:20px;
+margin-top:10px;
+cursor:pointer;
 }
 
 img{
 width:100%;
-margin-top:10px;
-border-radius:8px;
+border-radius:10px;
 }
 
-button{
-padding:10px 16px;
-background:#ff4d6d;
-color:white;
-border:none;
-border-radius:6px;
-}
 </style>
+
 </head>
 
 <body>
 
-<div class="box">
+<div class="container">
 
-<h3 id="title"></h3>
+<!-- PAGE 1 -->
+<div class="page" id="page1">
 
-<button onclick="playMusic()">Play Music 🎵</button>
+<h2 id="creatorText"></h2>
 
-<div id="photos"></div>
+<button onclick="showPage(2)">Next ➡️</button>
+
+</div>
+
+<!-- PAGE 2 -->
+<div class="page" id="page2">
+
+<h2>Play Music 🎵</h2>
+
+<button onclick="playMusic()">Play</button>
+
+</div>
+
+<!-- PAGE 3 -->
+<div class="page" id="page3">
+
+<h2>Do you like this surprise? ❤️</h2>
+
+<button onclick="romantic()">YES</button>
+
+<button onclick="angry()">NO</button>
+
+<p id="response"></p>
+
+<button id="nextAfterResponse" style="display:none" onclick="showPage(4)">
+Next ➡️
+</button>
+
+</div>
+
+<!-- PAGE 4 -->
+<div class="page" id="page4">
+
+<h2>Turn On Light 💡</h2>
+
+<button onclick="startSlideshow()">Light On</button>
+
+</div>
+
+<!-- PAGE 5 -->
+<div class="page" id="page5">
+
+<h2>Our Memories ❤️</h2>
+
+<img id="slide">
+
+</div>
+
+<!-- PAGE 6 -->
+<div class="page" id="page6">
+
+<h2>Website Owner</h2>
+
+<p>Partha Saha</p>
+
+<p>Contact Telegram: @Partha909</p>
+
+</div>
 
 </div>
 
@@ -54,31 +125,83 @@ border-radius:6px;
 
 <script>
 
-const id=new URLSearchParams(location.search).get("id")
+const params=new URLSearchParams(window.location.search)
+
+const id=params.get("id")
+
 const data=JSON.parse(localStorage.getItem(id))
 
-document.getElementById("title").innerText=
+document.getElementById("creatorText").innerText=
 "Website Created By "+data.creator+" ❤️"
+
+showPage(1)
+
+function showPage(n){
+
+document.querySelectorAll(".page").forEach(p=>p.style.display="none")
+
+document.getElementById("page"+n).style.display="block"
+
+}
 
 function playMusic(){
 
 const player=document.getElementById("player")
+
 player.src=data.music
+
 player.play()
 
-showPhotos()
+showPage(3)
 
 }
 
-function showPhotos(){
+function romantic(){
 
-const box=document.getElementById("photos")
+document.getElementById("response").innerText=
+"Aww ❤️ You are the most special person in my life."
 
-data.photos.forEach(url=>{
-const img=document.createElement("img")
-img.src=url
-box.appendChild(img)
-})
+document.getElementById("nextAfterResponse").style.display="block"
+
+}
+
+function angry(){
+
+document.getElementById("response").innerText=
+"😡 How can you say NO! Just see the surprise!"
+
+document.getElementById("nextAfterResponse").style.display="block"
+
+}
+
+let index=0
+
+function startSlideshow(){
+
+showPage(5)
+
+slide()
+
+}
+
+function slide(){
+
+const img=document.getElementById("slide")
+
+img.src=data.photos[index]
+
+index++
+
+if(index>=data.photos.length){
+
+setTimeout(()=>{
+showPage(6)
+},2000)
+
+return
+}
+
+setTimeout(slide,1500)
 
 }
 
