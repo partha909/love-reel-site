@@ -5,53 +5,57 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Love Reel Creator</title>
+<title>Create Love Link</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="script.js" defer></script>
 
 <style>
 
 body{
-margin:0;
 font-family:Arial;
-background:linear-gradient(135deg,#ff6a88,#ff99ac);
+background:#ff99ac;
 display:flex;
 justify-content:center;
 align-items:center;
 min-height:100vh;
 }
 
-.container{
+.box{
 background:white;
-width:380px;
 padding:25px;
-border-radius:15px;
+border-radius:12px;
+width:360px;
 text-align:center;
-box-shadow:0 10px 30px rgba(0,0,0,0.2);
 }
 
 input{
 width:90%;
 padding:10px;
 margin:6px;
-border-radius:8px;
-border:1px solid #ccc;
 }
 
 button{
-padding:10px 20px;
-margin-top:8px;
-border:none;
-border-radius:20px;
+padding:10px 18px;
 background:#ff4d6d;
 color:white;
+border:none;
+border-radius:6px;
 cursor:pointer;
 }
 
-.preview img{
-width:70px;
-height:70px;
-margin:5px;
-border-radius:8px;
-object-fit:cover;
+.progress{
+height:8px;
+background:#eee;
+margin-top:6px;
+border-radius:6px;
+}
+
+.bar{
+height:8px;
+width:0%;
+background:#ff4d6d;
+border-radius:6px;
 }
 
 </style>
@@ -60,37 +64,43 @@ object-fit:cover;
 
 <body>
 
-<div class="container">
+<div class="box">
 
-<h2>Create Love Reel ❤️</h2>
+<h2>Create Love Link ❤️</h2>
 
-<input id="creatorName" placeholder="Your Name">
+<input id="creator" placeholder="Your Name">
 
-<input id="loverName" placeholder="Lover Name">
+<input id="lover" placeholder="Lover Name">
 
 <br>
 
 Music
 
-<input type="file" id="musicFile" accept="audio/*">
+<input type="file" id="musicFile">
+
+<button onclick="uploadMusic()">Upload Music</button>
+
+<div class="progress"><div id="musicBar" class="bar"></div></div>
 
 <br>
 
 Photos
 
-<input type="file" id="photoFiles" multiple accept="image/*">
+<input type="file" id="photoFiles" multiple>
 
-<div class="preview" id="preview"></div>
+<button onclick="uploadPhotos()">Upload Photos</button>
+
+<div class="progress"><div id="photoBar" class="bar"></div></div>
 
 <br>
 
-<button onclick="generateLink()">Generate Love Link ❤️</button>
+<button id="generateBtn" onclick="generateLink()" style="display:none">
+Generate Love Link ❤️
+</button>
 
-<p id="linkBox"></p>
+<p id="link"></p>
 
 </div>
-
-<script src="script.js"></script>
 
 </body>
 </html>
