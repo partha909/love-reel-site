@@ -7,58 +7,17 @@
 
 <title>Love Reel</title>
 
-<style>
-
-body{
-margin:0;
-font-family:Arial;
-background:linear-gradient(135deg,#ff6a88,#ff99ac);
-display:flex;
-justify-content:center;
-align-items:center;
-min-height:100vh;
-}
-
-.container{
-background:white;
-width:360px;
-padding:25px;
-border-radius:15px;
-text-align:center;
-}
-
-img{
-width:100%;
-margin-top:10px;
-border-radius:10px;
-}
-
-button{
-padding:10px 20px;
-margin-top:10px;
-border:none;
-border-radius:20px;
-background:#ff4d6d;
-color:white;
-}
-
-</style>
-
 </head>
 
-<body>
-
-<div class="container">
+<body style="text-align:center">
 
 <h2 id="title"></h2>
 
-<button id="playMusic">Play Music 🎵</button>
+<button onclick="playMusic()">Play Music 🎵</button>
 
 <div id="photos"></div>
 
-</div>
-
-<audio id="musicPlayer"></audio>
+<audio id="player"></audio>
 
 <script>
 
@@ -71,9 +30,9 @@ const data=JSON.parse(localStorage.getItem(id))
 document.getElementById("title").innerText=
 "Website Created By "+data.creator+" ❤️"
 
-document.getElementById("playMusic").onclick=()=>{
+function playMusic(){
 
-const player=document.getElementById("musicPlayer")
+const player=document.getElementById("player")
 
 player.src=data.music
 
@@ -88,6 +47,7 @@ data.photos.forEach(p=>{
 const img=document.createElement("img")
 
 img.src=p
+img.style.width="200px"
 
 box.appendChild(img)
 
