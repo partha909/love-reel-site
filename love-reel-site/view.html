@@ -19,10 +19,17 @@ align-items:center;
 height:100vh;
 text-align:center;
 color:white;
+overflow:hidden;
 }
 
 .page{
 display:none;
+animation:fade 2s ease;
+}
+
+@keyframes fade{
+0%{opacity:0;transform:translateY(30px)}
+100%{opacity:1;transform:translateY(0)}
 }
 
 button{
@@ -34,6 +41,18 @@ background:#ff4d6d;
 color:white;
 font-size:16px;
 cursor:pointer;
+}
+
+img{
+width:250px;
+border-radius:12px;
+margin-top:15px;
+animation:zoom 5s ease forwards;
+}
+
+@keyframes zoom{
+0%{transform:scale(.9)}
+100%{transform:scale(1.1)}
 }
 
 </style>
@@ -49,7 +68,7 @@ cursor:pointer;
 
 <div id="page2" class="page">
 <h1>Play Music? 🎵</h1>
-<button onclick="nextPage(3)">YES ❤️</button>
+<button onclick="playMusic()">YES ❤️</button>
 <button onclick="alert('Press YES 😅')">NO ❌</button>
 </div>
 
@@ -72,13 +91,15 @@ cursor:pointer;
 
 <div id="page6" class="page">
 <h1>Turn The Light On 💡</h1>
-<button onclick="nextPage(7)">Light On ✨</button>
+<button onclick="startSlide()">Light On ✨</button>
 </div>
 
 <div id="page7" class="page">
 <h1>❤️ Our Memories ❤️</h1>
-<p>Photo slideshow here</p>
+<img id="slide">
 </div>
+
+<audio id="song"></audio>
 
 <script>
 
@@ -98,6 +119,44 @@ document.getElementById("creatorText").innerText =
 "Website Created By " + creator + " ❤️"
 
 nextPage(1)
+
+function playMusic(){
+
+const song=document.getElementById("song")
+
+song.src=localStorage.getItem("musicData")
+
+song.play()
+
+nextPage(3)
+
+}
+
+let photos=JSON.parse(localStorage.getItem("photoData")||"[]")
+
+let index=0
+
+function startSlide(){
+
+nextPage(7)
+
+showPhoto()
+
+}
+
+function showPhoto(){
+
+if(index>=photos.length)return
+
+const img=document.getElementById("slide")
+
+img.src=photos[index]
+
+index++
+
+setTimeout(showPhoto,4000)
+
+}
 
 </script>
 
