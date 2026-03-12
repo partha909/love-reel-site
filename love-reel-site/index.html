@@ -203,7 +203,11 @@ function startRecording(){
 
 let stream=canvas.captureStream(30)
 
-recorder=new MediaRecorder(stream)
+let options = {
+mimeType:"video/webm;codecs=vp8"
+}
+
+recorder=new MediaRecorder(stream,options)
 
 recorder.ondataavailable=e=>chunks.push(e.data)
 
@@ -226,7 +230,7 @@ let url=URL.createObjectURL(blob)
 let a=document.createElement("a")
 
 a.href=url
-a.download="love_reel_video.webm"
+a.download="love_reel_video.mp4"
 a.click()
 
 chunks=[]
