@@ -16,6 +16,7 @@ display:flex;
 justify-content:center;
 align-items:center;
 min-height:100vh;
+overflow:hidden;
 }
 
 .box{
@@ -26,6 +27,8 @@ padding:30px;
 border-radius:15px;
 text-align:center;
 box-shadow:0 10px 30px rgba(0,0,0,0.2);
+position:relative;
+z-index:2;
 }
 
 .page{display:none;}
@@ -50,6 +53,8 @@ width:100%;
 border-radius:10px;
 opacity:0;
 }
+
+/* PHOTO EFFECTS */
 
 .fade{animation:fade 2s forwards;}
 .zoom{animation:zoom 2s forwards;}
@@ -83,7 +88,7 @@ opacity:0;
 100%{opacity:1;filter:blur(0)}
 }
 
-/* NOTE ANIMATION */
+/* NOTE */
 
 .noteBox{
 background:white;
@@ -96,13 +101,86 @@ animation:noteSlide .8s ease;
 @keyframes noteSlide{
 
 0%{
-transform:translateY(-80px);
+transform:translateY(-100px);
 opacity:0;
 }
 
 100%{
 transform:translateY(0);
 opacity:1;
+}
+
+}
+
+/* MEMORIES TEXT */
+
+.memories{
+position:absolute;
+top:30px;
+left:50%;
+transform:translateX(-50%);
+color:white;
+text-align:center;
+font-weight:bold;
+text-shadow:0 0 10px rgba(255,255,255,.7);
+animation:glow 3s infinite alternate;
+}
+
+@keyframes glow{
+
+0%{
+opacity:.6;
+transform:translateX(-50%) scale(1);
+}
+
+100%{
+opacity:1;
+transform:translateX(-50%) scale(1.05);
+}
+
+}
+
+/* HEART FLOAT */
+
+.heart{
+position:fixed;
+bottom:-20px;
+color:#ff4d6d;
+font-size:20px;
+animation:heartFloat 6s linear infinite;
+}
+
+@keyframes heartFloat{
+
+0%{
+transform:translateY(0);
+opacity:1;
+}
+
+100%{
+transform:translateY(-110vh);
+opacity:0;
+}
+
+}
+
+/* FLOWER RAIN */
+
+.flower{
+position:fixed;
+top:-20px;
+font-size:22px;
+animation:flowerFall 7s linear infinite;
+}
+
+@keyframes flowerFall{
+
+0%{
+transform:translateY(0) rotate(0deg);
+}
+
+100%{
+transform:translateY(110vh) rotate(360deg);
 }
 
 }
@@ -150,7 +228,14 @@ opacity:1;
 </div>
 
 <div class="page" id="p7">
+
+<div class="memories">
+<h3>Our Memories ❤️</h3>
+<p>Every moment with you is special</p>
+</div>
+
 <img id="slide">
+
 </div>
 
 </div>
@@ -165,33 +250,31 @@ const data=JSON.parse(localStorage.getItem(id))
 
 show(1)
 
-/* SLOW TYPING */
+/* SMOOTH TYPING */
 
 function typeText(el,text){
 
 let i=0
 el.innerHTML=""
 
-const timer=setInterval(()=>{
+function typing(){
+
+if(i<text.length){
 
 el.innerHTML+=text.charAt(i)
 i++
 
-if(i>=text.length) clearInterval(timer)
-
-},200)
+setTimeout(typing,160)
 
 }
 
-/* FIRST TEXT */
+}
 
-typeText(
-document.getElementById("creatorText"),
-"Website Created By "+data.creator+" ❤️"
-)
+typing()
 
-/* PAGE TEXT */
+}
 
+typeText(document.getElementById("creatorText"),"Website Created By "+data.creator+" ❤️")
 typeText(document.getElementById("playText"),"Play Music?")
 typeText(document.getElementById("specialText"),"It's Your Special Day")
 typeText(document.getElementById("specialSub"),"Because you are special to me ❤️")
@@ -201,10 +284,8 @@ typeText(document.getElementById("seeText"),"Do you want to see what I made?")
 typeText(document.getElementById("lightText"),"Turn On Light 💡")
 
 function show(n){
-
 document.querySelectorAll(".page").forEach(p=>p.style.display="none")
 document.getElementById("p"+n).style.display="block"
-
 }
 
 /* NOTE */
@@ -302,6 +383,48 @@ if(index>=data.photos.length)return
 setTimeout(slide,2000)
 
 }
+
+/* HEARTS */
+
+function createHeart(){
+
+const heart=document.createElement("div")
+
+heart.className="heart"
+heart.innerHTML="❤️"
+
+heart.style.left=Math.random()*100+"vw"
+
+document.body.appendChild(heart)
+
+setTimeout(()=>{
+heart.remove()
+},6000)
+
+}
+
+setInterval(createHeart,800)
+
+/* FLOWERS */
+
+function createFlower(){
+
+const flower=document.createElement("div")
+
+flower.className="flower"
+flower.innerHTML="🌸"
+
+flower.style.left=Math.random()*100+"vw"
+
+document.body.appendChild(flower)
+
+setTimeout(()=>{
+flower.remove()
+},7000)
+
+}
+
+setInterval(createFlower,1200)
 
 </script>
 
