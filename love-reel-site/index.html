@@ -31,10 +31,10 @@ text-align:center;
 h2{
 color:#ff4d6d;
 margin-bottom:10px;
-animation:textFloat 2s ease;
+animation:textReveal 3s ease;
 }
 
-@keyframes textFloat{
+@keyframes textReveal{
 0%{opacity:0;transform:translateY(40px)}
 100%{opacity:1;transform:translateY(0)}
 }
@@ -61,21 +61,6 @@ color:#ff4d6d;
 margin-bottom:5px;
 }
 
-.preview{
-display:flex;
-flex-wrap:wrap;
-gap:10px;
-margin-top:10px;
-justify-content:center;
-}
-
-.preview img{
-width:75px;
-height:75px;
-object-fit:cover;
-border-radius:8px;
-}
-
 button.main{
 width:100%;
 padding:12px;
@@ -88,8 +73,6 @@ font-size:16px;
 cursor:pointer;
 }
 
-/* Romantic buttons */
-
 .storyBtn{
 padding:13px 28px;
 margin:12px;
@@ -99,72 +82,58 @@ background:linear-gradient(45deg,#ff4d6d,#ff2e55);
 color:white;
 font-size:18px;
 cursor:pointer;
-opacity:0;
-transform:translateY(40px);
-animation:btnRomantic 1.5s forwards;
+animation:btnAppear 2s ease;
 }
 
-@keyframes btnRomantic{
-0%{
-opacity:0;
-transform:translateY(50px) scale(.8);
-}
-100%{
-opacity:1;
-transform:translateY(0) scale(1);
-}
+@keyframes btnAppear{
+0%{opacity:0;transform:translateY(40px)}
+100%{opacity:1;transform:translateY(0)}
 }
 
 .storyPage{
 display:none;
 text-align:center;
 padding:30px;
-animation:textReveal 2s ease;
+animation:pageFade 3s ease;
 }
 
-@keyframes textReveal{
-0%{opacity:0;transform:translateY(30px)}
-100%{opacity:1;transform:translateY(0)}
+@keyframes pageFade{
+0%{opacity:0}
+100%{opacity:1}
 }
 
-/* Photo animation */
+/* photo animation slow */
 
 #slideshow img{
 width:300px;
 border-radius:12px;
-animation:photoMagic 2.5s ease forwards;
+animation:photoZoom 5s ease forwards;
 }
 
-@keyframes photoMagic{
-
-0%{
-opacity:0;
-transform:scale(.9);
+@keyframes photoZoom{
+0%{opacity:0;transform:scale(.9)}
+40%{opacity:1}
+100%{transform:scale(1.1)}
 }
 
-40%{
-opacity:1;
-}
-
-100%{
-transform:scale(1.1);
-}
-
-}
-
-/* Credit page */
+/* credit */
 
 .credit{
 display:none;
 text-align:center;
 color:white;
 font-size:26px;
-animation:creditFade 2s ease;
 }
 
-@keyframes creditFade{
-0%{opacity:0}
-100%{opacity:1}
+.downloadBtn{
+padding:12px 25px;
+margin-top:20px;
+background:#ff4d6d;
+border:none;
+color:white;
+border-radius:10px;
+font-size:18px;
+cursor:pointer;
 }
 
 </style>
@@ -180,14 +149,13 @@ animation:creditFade 2s ease;
 <input id="nameInput" placeholder="Your Name">
 
 <div class="uploadBox">
-<div class="uploadTitle">🎵 Upload Music</div>
+<div class="uploadTitle">Upload Music</div>
 <input type="file" id="music" accept="audio/*">
 </div>
 
 <div class="uploadBox">
-<div class="uploadTitle">📷 Upload Photos (1-20)</div>
+<div class="uploadTitle">Upload Photos</div>
 <input type="file" id="photos" multiple accept="image/*">
-<div class="preview" id="preview"></div>
 </div>
 
 <button class="main" onclick="startStory()">Create Reel</button>
@@ -195,13 +163,10 @@ animation:creditFade 2s ease;
 </div>
 
 
-<!-- STORY -->
-
 <div class="storyPage" id="page1">
 <h2 id="creatorText"></h2>
 <button class="storyBtn" onclick="showPage(2)">Next</button>
 </div>
-
 
 <div class="storyPage" id="page2">
 <h2>Play Music?</h2>
@@ -209,21 +174,18 @@ animation:creditFade 2s ease;
 <button class="storyBtn" onclick="alert('Please click YES 😊')">NO</button>
 </div>
 
-
 <div class="storyPage" id="page3">
 <h2>It's Your Special Day</h2>
 <p>Because You Are Special To Me ❤️</p>
 <button class="storyBtn" onclick="showPage(4)">OK</button>
 </div>
 
-
 <div class="storyPage" id="page4">
 <h2>I Had To Make Something Special</h2>
 <p>Because You Are Special To Me ❤️</p>
 <button class="storyBtn" onclick="showPage(5)">I Want To Show</button>
-<button class="storyBtn" onclick="alert('Hey! You must see this 😡')">I Don't Want</button>
+<button class="storyBtn" onclick="alert('You must see this! 😡')">I Don't Want</button>
 </div>
-
 
 <div class="storyPage" id="page5">
 <h2>Do You Want To See What I Made?</h2>
@@ -231,30 +193,27 @@ animation:creditFade 2s ease;
 <button class="storyBtn" onclick="alert('You must see this! 😠')">NO</button>
 </div>
 
-
 <div class="storyPage" id="page6">
-<h2>💡 Light On</h2>
+<h2>Light On</h2>
 <button class="storyBtn" onclick="startSlideshow()">Light On</button>
 </div>
 
-
 <div class="storyPage" id="slideshow">
-<h2>❤️ Our Memories ❤️</h2>
+<h2>Our Memories ❤️</h2>
 <img id="slide">
 </div>
 
 
-<!-- CREDIT PAGE -->
-
 <div class="credit" id="creditPage">
 
 <h1>Website Managed By</h1>
-
 <h1>Partha Saha</h1>
 
 <p>If you need more custom websites</p>
 
 <p>Contact on Telegram: @Partha909</p>
+
+<button class="downloadBtn" onclick="downloadVideo()">Download Video</button>
 
 </div>
 
@@ -288,9 +247,7 @@ document.querySelectorAll(".storyPage").forEach(p=>p.style.display="none")
 
 let page=document.getElementById("page"+n)
 
-if(page){
-page.style.display="block"
-}
+if(page) page.style.display="block"
 
 }
 
@@ -307,9 +264,9 @@ let song=document.getElementById("song")
 
 song.src=URL.createObjectURL(file)
 
-song.play().then(()=>{
+song.play()
+
 showPage(3)
-})
 
 }
 
@@ -353,12 +310,18 @@ img.style.animation="none"
 
 setTimeout(()=>{
 img.src=photos[index]
-img.style.animation="photoMagic 2.5s ease forwards"
+img.style.animation="photoZoom 5s ease forwards"
 },50)
 
 index++
 
-setTimeout(slide,2500)
+setTimeout(slide,5000)
+
+}
+
+function downloadVideo(){
+
+alert("Video download feature works best in advanced version. For now screen record the reel.")
 
 }
 
