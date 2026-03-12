@@ -1,63 +1,35 @@
-const supabase = window.supabase.createClient(
-"https://wakqdyivbsayqcgptvwt.supabase.co",
-"sb_publishable_hmfrQQc8drLkV2hlN9c3pA_Vp9vC68h"
-)
-
 let musicURL=""
 let photoURLs=[]
 
-async function uploadMusic(){
+document.getElementById("musicFile").onchange=function(){
 
-const file=document.getElementById("music").files[0]
+const file=this.files[0]
 
-if(!file){
-alert("Select music first")
-return
-}
-
-const path="music/"+Date.now()+"_"+file.name
-
-await supabase.storage
-.from("love-reels")
-.upload(path,file)
-
-musicURL=supabase.storage
-.from("love-reels")
-.getPublicUrl(path).data.publicUrl
-
-checkReady()
+musicURL=URL.createObjectURL(file)
 
 }
 
-async function uploadPhotos(){
+document.getElementById("photoFiles").onchange=function(){
 
-const files=document.getElementById("photos").files
+const files=this.files
 
-for(let file of files){
+const preview=document.getElementById("preview")
 
-const path="photos/"+Date.now()+"_"+file.name
+preview.innerHTML=""
 
-await supabase.storage
-.from("love-reels")
-.upload(path,file)
+photoURLs=[]
 
-const url=supabase.storage
-.from("love-reels")
-.getPublicUrl(path).data.publicUrl
+for(let f of files){
+
+const url=URL.createObjectURL(f)
 
 photoURLs.push(url)
 
-}
+const img=document.createElement("img")
 
-checkReady()
+img.src=url
 
-}
-
-function checkReady(){
-
-if(musicURL && photoURLs.length>0){
-
-document.getElementById("generateBtn").style.display="block"
+preview.appendChild(img)
 
 }
 
@@ -65,19 +37,34 @@ document.getElementById("generateBtn").style.display="block"
 
 function generateLink(){
 
-const creator=document.getElementById("creator").value
-const lover=document.getElementById("lover").value
+const creator=document.getElementById("creatorName").value
+const lover=document.getElementById("loverName").value
 
-const data={creator,lover,music:musicURL,photos:photoURLs}
+if(!creator || !lover || !musicURL || photoURLs.length===0){
+
+alert("Fill all fields")
+
+return
+
+}
 
 const id=Date.now().toString(36)
 
-localStorage.setItem(id,JSON.stringify(data))
+localStorage.setItem(id,JSON.stringify({
+
+creator,
+lover,
+music:musicURL,
+photos:photoURLs
+
+}))
 
 const link=window.location.origin+"/view.html?id="+id
 
-document.getElementById("result").innerText=link
+document.getElementById("linkBox").innerText=link
 
 navigator.clipboard.writeText(link)
+
+alert("Love link copied ❤️")
 
 }
