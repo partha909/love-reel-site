@@ -1,35 +1,75 @@
+const SUPABASE_URL = "https://wakqdyivbsayqcgptvwt.supabase.co"
+const SUPABASE_KEY = "sb_publishable_hmfrQQc8drLkV2hlN9c3pA_Vp9vC68h"
+
+const supabase = supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+)
+
 let musicURL=""
 let photoURLs=[]
 
-document.getElementById("musicFile").onchange=function(){
+async function uploadMusic(){
 
-const file=this.files[0]
+const file=document.getElementById("musicFile").files[0]
 
-musicURL=URL.createObjectURL(file)
+if(!file){
+alert("Select music first")
+return
+}
+
+const path="music/"+Date.now()+"_"+file.name
+
+const {data,error}=await supabase.storage
+.from("love-reels")
+.upload(path,file)
+
+if(error){
+alert("Upload error")
+return
+}
+
+musicURL=supabase.storage
+.from("love-reels")
+.getPublicUrl(path).data.publicUrl
+
+document.getElementById("musicBar").style.width="100%"
+
+checkReady()
 
 }
 
-document.getElementById("photoFiles").onchange=function(){
+async function uploadPhotos(){
 
-const files=this.files
+const files=document.getElementById("photoFiles").files
 
-const preview=document.getElementById("preview")
+for(let file of files){
 
-preview.innerHTML=""
+const path="photos/"+Date.now()+"_"+file.name
 
-photoURLs=[]
+await supabase.storage
+.from("love-reels")
+.upload(path,file)
 
-for(let f of files){
-
-const url=URL.createObjectURL(f)
+const url=supabase.storage
+.from("love-reels")
+.getPublicUrl(path).data.publicUrl
 
 photoURLs.push(url)
 
-const img=document.createElement("img")
+}
 
-img.src=url
+document.getElementById("photoBar").style.width="100%"
 
-preview.appendChild(img)
+checkReady()
+
+}
+
+function checkReady(){
+
+if(musicURL && photoURLs.length>0){
+
+document.getElementById("generateBtn").style.display="block"
 
 }
 
@@ -37,16 +77,9 @@ preview.appendChild(img)
 
 function generateLink(){
 
-const creator=document.getElementById("creatorName").value
-const lover=document.getElementById("loverName").value
+const creator=document.getElementById("creator").value
 
-if(!creator || !lover || !musicURL || photoURLs.length===0){
-
-alert("Fill all fields")
-
-return
-
-}
+const lover=document.getElementById("lover").value
 
 const id=Date.now().toString(36)
 
@@ -61,10 +94,8 @@ photos:photoURLs
 
 const link=window.location.origin+"/view.html?id="+id
 
-document.getElementById("linkBox").innerText=link
+document.getElementById("link").innerText=link
 
 navigator.clipboard.writeText(link)
-
-alert("Love link copied ❤️")
 
 }
