@@ -43,32 +43,32 @@ cursor:pointer;
 opacity:0;
 }
 
-/* BUTTON ANIMATIONS */
+/* BUTTON BOUNCE FROM FAR */
 
-.btnDrop{animation:dropBtn .8s ease forwards;}
-@keyframes dropBtn{
-0%{transform:translateY(-120px);opacity:0;}
-70%{transform:translateY(10px);}
-100%{transform:translateY(0);opacity:1;}
+.btnBounce{
+animation:bounceBtn 1.2s ease forwards;
 }
 
-.btnRight{animation:rightBtn .8s ease forwards;}
-@keyframes rightBtn{
-0%{transform:translateX(150px);opacity:0;}
-100%{transform:translateX(0);opacity:1;}
-}
-
-.btnLeft{animation:leftBtn .8s ease forwards;}
-@keyframes leftBtn{
-0%{transform:translateX(-150px);opacity:0;}
-100%{transform:translateX(0);opacity:1;}
-}
-
-.btnBounce{animation:bounceBtn .8s ease forwards;}
 @keyframes bounceBtn{
-0%{transform:scale(0);opacity:0;}
-70%{transform:scale(1.2);}
-100%{transform:scale(1);opacity:1;}
+
+0%{
+transform:translateY(120px) scale(0.8);
+opacity:0;
+}
+
+50%{
+transform:translateY(-15px) scale(1.1);
+}
+
+70%{
+transform:translateY(10px);
+}
+
+100%{
+transform:translateY(0);
+opacity:1;
+}
+
 }
 
 /* CURSOR */
@@ -233,9 +233,15 @@ setTimeout(typing,speed)
 
 cursor.remove()
 
+/* WAIT 1 SECOND BEFORE BUTTON */
+
+setTimeout(()=>{
+
 buttons.forEach(btn=>{
 btn.classList.add("btnBounce")
 })
+
+},1000)
 
 }
 
@@ -330,10 +336,12 @@ document.body.appendChild(note)
 
 typeLetter(h,text,80)
 
+/* NOTE WAIT LONGER */
+
 setTimeout(()=>{
 note.remove()
 show(next)
-},3000)
+},5500)
 
 }
 
