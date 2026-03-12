@@ -2,6 +2,7 @@
 <html>
 <head>
 
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>Love Reel</title>
@@ -29,10 +30,10 @@ box-shadow:0 10px 30px rgba(0,0,0,0.2);
 
 h2{
 color:#ff4d6d;
-animation:textFade 3s ease;
+animation:fadeText 3s ease;
 }
 
-@keyframes textFade{
+@keyframes fadeText{
 0%{opacity:0;transform:translateY(30px)}
 100%{opacity:1;transform:translateY(0)}
 }
@@ -51,10 +52,10 @@ cursor:pointer;
 .storyPage{
 display:none;
 text-align:center;
-animation:fade 2s ease;
+animation:fadePage 2s ease;
 }
 
-@keyframes fade{
+@keyframes fadePage{
 0%{opacity:0}
 100%{opacity:1}
 }
@@ -93,7 +94,7 @@ font-size:24px;
 
 <input type="file" id="photos" multiple accept="image/*"><br><br>
 
-<button onclick="startStory()">Create Reel</button>
+<button onclick="startStory()">Create Reel 💖</button>
 
 </div>
 
@@ -131,13 +132,13 @@ font-size:24px;
 
 <div class="storyPage" id="page4">
 
-<h2>I Had To Make Something Special ✨</h2>
+<h2>I Made Something Special ✨</h2>
 
 <p>Because You Are Special To Me ❤️</p>
 
 <button onclick="showPage(5)">I Want To See 👀</button>
 
-<button onclick="alert('Hey! You Must See This 😡')">I Don't Want ❌</button>
+<button onclick="alert('You Must See This 😡')">I Don't Want ❌</button>
 
 </div>
 
@@ -148,7 +149,7 @@ font-size:24px;
 
 <button onclick="showPage(6)">YES 😍</button>
 
-<button onclick="alert('You Must See This! 😤')">NO ❌</button>
+<button onclick="alert('You Must See This 😤')">NO ❌</button>
 
 </div>
 
@@ -218,17 +219,19 @@ recorder.stop()
 
 function downloadVideo(){
 
-let blob=new Blob(chunks,{type:"video/mp4"})
+let blob=new Blob(chunks,{type:"video/webm"})
 
 let url=URL.createObjectURL(blob)
 
 let a=document.createElement("a")
 
 a.href=url
-
-a.download="love_reel_video.mp4"
-
+a.download="love_reel_video.webm"
 a.click()
+
+chunks=[]
+
+URL.revokeObjectURL(url)
 
 }
 
