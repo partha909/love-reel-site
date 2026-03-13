@@ -85,7 +85,7 @@ width:80%;
 border-radius:12px;
 }
 
-/* ROMANTIC IMAGE EFFECTS */
+/* NEW ROMANTIC IMAGE ANIMATIONS (ADDED) */
 
 .animBlur{animation:blurClear 2.5s ease}
 @keyframes blurClear{
@@ -136,36 +136,7 @@ border-radius:12px;
 100%{transform:scale(1);opacity:1}
 }
 
-/* HEART RAIN */
-
-.heart{
-position:fixed;
-bottom:-20px;
-color:#ff4d6d;
-font-size:20px;
-animation:heartFloat 6s linear infinite;
-}
-
-@keyframes heartFloat{
-0%{transform:translateY(0);opacity:1}
-100%{transform:translateY(-110vh);opacity:0}
-}
-
-/* FLOWER */
-
-.flower{
-position:fixed;
-top:-20px;
-font-size:22px;
-animation:flowerFall 7s linear infinite;
-}
-
-@keyframes flowerFall{
-0%{transform:translateY(0) rotate(0deg)}
-100%{transform:translateY(110vh) rotate(360deg)}
-}
-
-/* CREDIT */
+/* CREDIT SCREEN (ADDED) */
 
 .creditScreen{
 position:fixed;
@@ -203,163 +174,15 @@ margin-top:10px;
 
 <div class="box">
 
-<div class="page" id="p1">
-<h2 id="creatorText"></h2>
-<button id="btn1" onclick="show(2)">Next</button>
-</div>
-
-<div class="page" id="p2">
-<h3 id="playText"></h3>
-<button id="playBtn" onclick="playMusic()">Play</button>
-<button id="notBtn" onclick="angryPlay()">Not Play</button>
-</div>
-
-<div class="page" id="p3">
-<h3 id="specialText"></h3>
-<p id="specialSub"></p>
-<button id="thankBtn" onclick="thankYou()">Thank You ❤️</button>
-</div>
-
-<div class="page" id="p4">
-<h3 id="makeText"></h3>
-<p id="makeSub"></p>
-<button id="excitedBtn" onclick="excited()">I Am Excited</button>
-<button id="noBtn" onclick="angryExcited()">Not Excited</button>
-</div>
-
-<div class="page" id="p5">
-<h3 id="seeText"></h3>
-<button id="yesBtn" onclick="romantic()">Yes</button>
-<button id="noBtn2" onclick="angrySee()">No</button>
-</div>
-
-<div class="page" id="p6">
-<h3 id="lightText"></h3>
-<button id="lightBtn" onclick="startSlide()">Light On</button>
-</div>
-
 <div class="page" id="p7">
 <img id="slide">
 </div>
 
 </div>
 
-<audio id="player"></audio>
-
 <script>
 
-const params=new URLSearchParams(window.location.search)
-const id=params.get("id")
-const data=JSON.parse(localStorage.getItem(id))
-
-show(1)
-
-function typeLetter(el,text,speed=80,buttons=[]){
-
-el.innerHTML=""
-
-let i=0
-
-const cursor=document.createElement("span")
-cursor.className="cursor"
-cursor.innerHTML="|"
-
-el.appendChild(cursor)
-
-function typing(){
-
-if(i<text.length){
-
-cursor.remove()
-
-el.innerHTML+=text.charAt(i)
-
-el.appendChild(cursor)
-
-i++
-
-setTimeout(typing,speed)
-
-}else{
-
-cursor.remove()
-
-setTimeout(()=>{
-buttons.forEach(btn=>{
-btn.classList.add("btnBounce")
-})
-},1000)
-
-}
-
-}
-
-typing()
-
-}
-
-function show(n){
-document.querySelectorAll(".page").forEach(p=>p.style.display="none")
-document.getElementById("p"+n).style.display="block"
-}
-
-function showNote(text,next){
-
-const note=document.createElement("div")
-note.className="noteBox"
-
-const h=document.createElement("h3")
-
-note.appendChild(h)
-
-document.body.appendChild(note)
-
-h.innerText=text
-
-setTimeout(()=>{
-note.remove()
-show(next)
-},5500)
-
-}
-
-function playMusic(){
-const player=document.getElementById("player")
-player.src=data.music
-player.play()
-showNote("Thank You For Playing This Music ❤️",3)
-}
-
-function thankYou(){
-showNote("You Make This Moment Special ❤️",4)
-}
-
-function excited(){
-showNote("That Makes Me Really Happy ❤️",5)
-}
-
-function romantic(){
-showNote("You Are The Most Special Person In My Life ❤️",6)
-}
-
-function angryPlay(){
-showNote("Oh no... please play the music once 😔",2)
-}
-
-function angryExcited(){
-showNote("Really? I made this with so much love 💔",4)
-}
-
-function angrySee(){
-showNote("Come on... you should see it at least once 😟",5)
-}
-
 let index=0
-
-function startSlide(){
-show(7)
-slide()
-}
 
 function slide(){
 
@@ -397,6 +220,8 @@ setTimeout(slide,2200)
 
 }
 
+/* CREDIT FUNCTION */
+
 function showCredits(){
 
 const credit=document.createElement("div")
@@ -414,28 +239,6 @@ credit.innerHTML=`
 document.body.appendChild(credit)
 
 }
-
-function createHeart(){
-const heart=document.createElement("div")
-heart.className="heart"
-heart.innerHTML="❤️"
-heart.style.left=Math.random()*100+"vw"
-document.body.appendChild(heart)
-setTimeout(()=>heart.remove(),6000)
-}
-
-setInterval(createHeart,800)
-
-function createFlower(){
-const flower=document.createElement("div")
-flower.className="flower"
-flower.innerHTML="🌸"
-flower.style.left=Math.random()*100+"vw"
-document.body.appendChild(flower)
-setTimeout(()=>flower.remove(),7000)
-}
-
-setInterval(createFlower,1200)
 
 </script>
 
