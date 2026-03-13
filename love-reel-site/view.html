@@ -85,9 +85,9 @@ width:80%;
 border-radius:12px;
 }
 
-/* NEW ROMANTIC IMAGE ANIMATIONS (ADDED) */
+/* IMAGE ANIMATIONS */
 
-.animBlur{animation:blurClear 2.5s ease}
+.animBlur{animation:blurClear 2s ease}
 @keyframes blurClear{
 0%{filter:blur(25px);opacity:0;transform:scale(1.2)}
 100%{filter:blur(0);opacity:1;transform:scale(1)}
@@ -129,14 +129,7 @@ border-radius:12px;
 100%{transform:translateX(0);opacity:1}
 }
 
-.animHeart{animation:heartRomantic 2s ease}
-@keyframes heartRomantic{
-0%{transform:scale(0);opacity:0}
-60%{transform:scale(1.2)}
-100%{transform:scale(1);opacity:1}
-}
-
-/* CREDIT SCREEN (ADDED) */
+/* CREDIT */
 
 .creditScreen{
 position:fixed;
@@ -174,15 +167,128 @@ margin-top:10px;
 
 <div class="box">
 
+<div class="page" id="p1">
+<h2 id="creatorText"></h2>
+<button id="btn1" onclick="show(2)">Next</button>
+</div>
+
+<div class="page" id="p2">
+<h3 id="playText"></h3>
+<button id="playBtn" onclick="playMusic()">Play</button>
+<button id="notBtn" onclick="angryPlay()">Not Play</button>
+</div>
+
+<div class="page" id="p3">
+<h3 id="specialText"></h3>
+<p id="specialSub"></p>
+<button id="thankBtn" onclick="thankYou()">Thank You ❤️</button>
+</div>
+
+<div class="page" id="p4">
+<h3 id="makeText"></h3>
+<p id="makeSub"></p>
+<button id="excitedBtn" onclick="excited()">I Am Excited</button>
+<button id="noBtn" onclick="angryExcited()">Not Excited</button>
+</div>
+
+<div class="page" id="p5">
+<h3 id="seeText"></h3>
+<button id="yesBtn" onclick="romantic()">Yes</button>
+<button id="noBtn2" onclick="angrySee()">No</button>
+</div>
+
+<div class="page" id="p6">
+<h3 id="lightText"></h3>
+<button id="lightBtn" onclick="startSlide()">Light On</button>
+</div>
+
 <div class="page" id="p7">
 <img id="slide">
 </div>
 
 </div>
 
+<audio id="player"></audio>
+
 <script>
 
+const params=new URLSearchParams(window.location.search)
+const id=params.get("id")
+const data=JSON.parse(localStorage.getItem(id))
+
+show(1)
+
+/* TEXT INITIALIZATION (RESTORED) */
+
+typeLetter(
+document.getElementById("creatorText"),
+"Welcome To My Website Created By "+data.creator+" ❤️",
+80,
+[document.getElementById("btn1")]
+)
+
+typeLetter(
+document.getElementById("playText"),
+"Play Music?",
+80,
+[
+document.getElementById("playBtn"),
+document.getElementById("notBtn")
+]
+)
+
+typeLetter(
+document.getElementById("specialText"),
+"It's Your Special Day"
+)
+
+typeLetter(
+document.getElementById("specialSub"),
+"Because You Are Special To Me ❤️",
+80,
+[document.getElementById("thankBtn")]
+)
+
+typeLetter(
+document.getElementById("makeText"),
+"I Had To Make Something Special"
+)
+
+typeLetter(
+document.getElementById("makeSub"),
+"Because You Are Special To Me ❤️",
+80,
+[
+document.getElementById("excitedBtn"),
+document.getElementById("noBtn")
+]
+)
+
+typeLetter(
+document.getElementById("seeText"),
+"Do You Want To See What I Made?",
+80,
+[
+document.getElementById("yesBtn"),
+document.getElementById("noBtn2")
+]
+)
+
+typeLetter(
+document.getElementById("lightText"),
+"Turn On The Light",
+80,
+[document.getElementById("lightBtn")]
+)
+
+/* SLIDESHOW */
+
 let index=0
+
+function startSlide(){
+show(7)
+slide()
+}
 
 function slide(){
 
@@ -195,8 +301,7 @@ const animations=[
 "animBottom",
 "animRotate",
 "animLeft",
-"animRight",
-"animHeart"
+"animRight"
 ]
 
 img.className=""
@@ -219,8 +324,6 @@ return
 setTimeout(slide,2200)
 
 }
-
-/* CREDIT FUNCTION */
 
 function showCredits(){
 
